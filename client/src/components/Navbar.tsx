@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { ModeToggle } from './ModeToggle';
 import { Button } from './ui/button';
 import { Apple, SquarePen } from 'lucide-react';
@@ -11,7 +12,9 @@ export const Navbar = () => {
           <Button variant="secondary">
             <SquarePen /> Write
           </Button>
-          <Button>Sign In</Button>
+          <Button asChild>
+            <Link to="/auth">Sign in</Link>
+          </Button>
         </div>
       </nav>
     </header>
