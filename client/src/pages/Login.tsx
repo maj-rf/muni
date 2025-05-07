@@ -13,6 +13,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
+import { authClient } from '@/lib/auth-client';
+import { useState } from 'react';
 
 const LoginSchema = z.object({
   email: z.string().email(),
@@ -29,9 +31,23 @@ const LoginForm = () => {
       password: '',
     },
   });
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: LoginFormValues) => {
-    console.log(data);
+    await authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onRequest: () => setLoading(true),
+        onSuccess: () => setLoading(false),
+        onError: (ctx) => {
+          setLoading(false);
+          alert(ctx.error.message);
+        },
+      },
+    );
   };
 
   return (
@@ -68,7 +84,9 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full">Submit</Button>
+        <Button className="w-full" disabled={loading}>
+          Submit
+        </Button>
         <Button variant="link" asChild>
           <Link to="/auth/register" className="w-full">
             Don't have an account? Register

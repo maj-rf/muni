@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -54,9 +55,25 @@ export const Register = () => {
       confirmPassword: '',
     },
   });
-
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (data: RegisterFormValues) => {
     console.log(data);
+    await authClient.signUp.email(
+      {
+        email: data.email,
+        password: data.password,
+        name: data.displayName,
+      },
+      {
+        onRequest: () => setLoading(true),
+        onSuccess: () => setLoading(false),
+        onError: (ctx) => {
+          // display the error message
+          setLoading(false);
+          alert(ctx.error.message);
+        },
+      },
+    );
   };
 
   return (
@@ -122,7 +139,9 @@ export const Register = () => {
           )}
         />
 
-        <Button className="w-full">Submit</Button>
+        <Button className="w-full" disabled={loading}>
+          Submit
+        </Button>
         <Button variant="link" asChild>
           <Link to="/auth" className="w-full">
             Already have an account? Register here
