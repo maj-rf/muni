@@ -8,7 +8,7 @@ import { corsOptions } from './config/corsConfig.js';
 
 const app = express();
 app.use(cors(corsOptions));
-app.all('/api/v1/auth/*splat', toNodeHandler(auth));
+app.all('/api/auth/{*splat}', toNodeHandler(auth));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
