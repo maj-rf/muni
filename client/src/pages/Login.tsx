@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
 import { authClient } from '@/lib/auth-client';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const LoginSchema = z.object({
   email: z.string().email(),
@@ -44,7 +45,13 @@ const LoginForm = () => {
         onSuccess: () => setLoading(false),
         onError: (ctx) => {
           setLoading(false);
-          alert(ctx.error.message);
+          toast.error('Error logging -in', {
+            description: ctx.error.message,
+            action: {
+              label: <>X</>,
+              onClick: () => console.log('Undo'),
+            },
+          });
         },
       },
     );
@@ -89,7 +96,7 @@ const LoginForm = () => {
         </Button>
         <Button variant="link" asChild>
           <Link to="/auth/register" className="w-full">
-            Don't have an account? Register
+            Don't have an account? Register here
           </Link>
         </Button>
       </form>

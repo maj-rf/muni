@@ -144,7 +144,7 @@ export const Register = () => {
         </Button>
         <Button variant="link" asChild>
           <Link to="/auth" className="w-full">
-            Already have an account? Register here
+            Already have an account? Login here
           </Link>
         </Button>
       </form>

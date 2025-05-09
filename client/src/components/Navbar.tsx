@@ -3,34 +3,39 @@ import { ModeToggle } from './ModeToggle';
 import { Button } from './ui/button';
 import { Apple, SquarePen } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
-export const Navbar = ({
-  user,
-}: {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    emailVerified: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    image?: string | null | undefined;
-  };
-}) => {
+import { Loading } from './common/Loading';
+import { toast } from 'sonner';
+export const Navbar = () => {
+  const { data, isPending } = authClient.useSession();
+
+  if (isPending)
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+
   return (
     <header>
-      <nav className="w-full bg-orange-300 p-3 flex items-center">
+      <nav className="w-full bg-primary-foreground p-3 flex items-center">
         <Apple size={30} strokeWidth={2} fill="tomato" color="red" />
         <div className="flex gap-2 ml-auto">
           <ModeToggle />
-          {user ? (
+          {data && data.user ? (
             <>
-              <div className="self-center">Hello, {user.name}!</div>
+              <div className="self-center">Hello, {data.user.name}!</div>
               <Button variant="secondary">
                 <SquarePen /> Write
               </Button>
               <Button
                 onClick={async () => {
-                  await authClient.signOut();
+                  await authClient.signOut({
+                    fetchOptions: {
+                      onSuccess: () => {
+                        toast.success('Logged-out succesfully');
+                      },
+                    },
+                  });
                 }}
               >
                 Logout
