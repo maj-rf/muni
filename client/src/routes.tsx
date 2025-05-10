@@ -4,6 +4,7 @@ import { AuthLayout } from './components/AuthLayout';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
+import { Post } from './pages/Post';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -13,6 +14,10 @@ export const routesConfig: RouteObject[] = [
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/posts/:id',
+        element: <Post />,
       },
     ],
   },
