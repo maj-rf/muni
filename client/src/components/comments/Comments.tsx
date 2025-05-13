@@ -1,11 +1,11 @@
 import { CommentForm } from './CommentForm';
+import { CommentList } from './CommentList';
 
 export const Comments = ({ id }: { id: string }) => {
   return (
-    <div>
+    <div className="rounded-lg overflow-hidden">
       <CommentForm id={id} />
-
-      <div>Comments for {id}</div>
+      <CommentList id={id} />
     </div>
   );
 };
