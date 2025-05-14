@@ -5,6 +5,7 @@ import { Register } from './pages/Register';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { Post } from './pages/Post';
+import { RandomPost } from './components/posts/RandomPost';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -14,6 +15,10 @@ export const routesConfig: RouteObject[] = [
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/posts/random',
+        element: <RandomPost />,
       },
       {
         path: '/posts/:id',
