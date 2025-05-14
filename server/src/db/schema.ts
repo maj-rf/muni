@@ -1,4 +1,5 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+import { pgTable, text, timestamp, boolean, uuid } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -49,3 +50,53 @@ export const verification = pgTable('verification', {
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('updated_at'),
 });
+
+export const post = pgTable('post', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  slug: text('slug').notNull(),
+  content: text('content').notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
+});
+
+export const comment = pgTable('comment', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  content: text('content').notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  postId: uuid('post_id')
+    .notNull()
+    .references(() => post.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
+});
+
+// ---------- Relations ----------
+export const userRelations = relations(user, ({ many }) => ({
+  posts: many(post),
+  comments: many(comment),
+}));
+
+export const postRelations = relations(post, ({ one, many }) => ({
+  author: one(user, {
+    fields: [post.userId],
+    references: [user.id],
+  }),
+  comments: many(comment),
+}));
+
+export const commentRelations = relations(comment, ({ one }) => ({
+  author: one(user, {
+    fields: [comment.userId],
+    references: [user.id],
+  }),
+  post: one(post, {
+    fields: [comment.postId],
+    references: [post.id],
+  }),
+}));
