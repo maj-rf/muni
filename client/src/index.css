@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -116,5 +117,15 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+}
+
+@layer utilities {
+   .prose code {
+    --baseBg: white;
+    @apply text-pink-400 before:content-none after:content-none;
+
+
   }
 }

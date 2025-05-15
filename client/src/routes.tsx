@@ -6,6 +6,7 @@ import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { Post } from './pages/Post';
 import { RandomPost } from './components/posts/RandomPost';
+import { Editor } from './components/profile/Editor';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -15,6 +16,10 @@ export const routesConfig: RouteObject[] = [
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/profile',
+        element: <Editor />,
       },
       {
         path: '/posts/random',
