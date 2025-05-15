@@ -6,7 +6,7 @@ import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { Post } from './pages/Post';
 import { RandomPost } from './components/posts/RandomPost';
-import { Editor } from './components/profile/Editor';
+import { ProfileCreatePost } from './pages/ProfileCreatePost';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -19,7 +19,7 @@ export const routesConfig: RouteObject[] = [
       },
       {
         path: '/profile',
-        element: <Editor />,
+        element: <ProfileCreatePost />,
       },
       {
         path: '/posts/random',

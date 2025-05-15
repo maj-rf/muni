@@ -125,7 +125,17 @@
    .prose code {
     --baseBg: white;
     @apply text-pink-400 before:content-none after:content-none;
+  }
 
+  .prose a {
+    @apply text-blue-500
+  }
 
+  .prose blockquote {
+    @apply border-l-stone-600;
+  }
+
+  .prose ::marker {
+    @apply text-stone-600;
   }
 }

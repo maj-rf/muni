@@ -24,50 +24,43 @@ import {
   InsertThematicBreak,
   DiffSourceToggleWrapper,
 } from '@mdxeditor/editor';
-import { useRef } from 'react';
 import '@mdxeditor/editor/style.css';
 
-const markdown = `
-# Hello World
-
-Grocery List
-- Apple
-- Orange
-
-The overriding design goal for Markdown's formatting syntax is to make it as readable as possible.
-The idea is that a Markdown-formatted document should be publishable as-is, as plain text,
-without looking like it's been marked up with tags or formatting instructions.
-
-\`This is an inline code example\`
-
-Below is a code block:
-\`\`\`js
-const red = "red";
-\`\`\`
-`;
-
-export const Editor = () => {
-  const ref = useRef<MDXEditorMethods>(null);
-
+export const Editor = ({
+  ref,
+  onBlur,
+  value,
+}: {
+  ref: React.RefObject<MDXEditorMethods | null>;
+  onBlur: () => void;
+  value: string;
+}) => {
   return (
     <MDXEditor
-      className="mt-8 bg-amber-50 dark:bg-gray-100 w-full max-w-fit mx-auto rounded-2xl "
+      className="bg-amber-50 dark:bg-gray-100 w-full max-w-fit mx-auto rounded-2xl "
       ref={ref}
+      onBlur={onBlur}
       contentEditableClassName="prose"
-      markdown={markdown}
+      markdown={value}
+      toMarkdownOptions={{
+        bullet: '+',
+        emphasis: '_',
+      }}
       plugins={[
         toolbarPlugin({
           toolbarContents: () => (
             <DiffSourceToggleWrapper>
-              <UndoRedo />
-              <BlockTypeSelect />
-              <BoldItalicUnderlineToggles />
-              <CreateLink />
-              <ListsToggle />
-              <CodeToggle />
-              <InsertCodeBlock />
-              <InsertThematicBreak />
-              <InsertImage />
+              <div className="flex flex-wrap gap-1">
+                <UndoRedo />
+                <BlockTypeSelect />
+                <BoldItalicUnderlineToggles />
+                <CreateLink />
+                <ListsToggle />
+                <CodeToggle />
+                <InsertCodeBlock />
+                <InsertThematicBreak />
+                <InsertImage />
+              </div>
             </DiffSourceToggleWrapper>
           ),
         }),
@@ -82,6 +75,7 @@ export const Editor = () => {
         codeMirrorPlugin({
           codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' },
         }),
+
         diffSourcePlugin({ viewMode: 'rich-text', diffMarkdown: 'boo' }),
         markdownShortcutPlugin(),
       ]}

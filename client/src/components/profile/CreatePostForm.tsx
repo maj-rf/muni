@@ -1,0 +1,130 @@
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Editor } from './Editor';
+import { useRef } from 'react';
+import { MDXEditorMethods } from '@mdxeditor/editor';
+const PostSchema = z.object({
+  title: z
+    .string()
+    .min(5, { message: 'Title must be at least 5 characters' })
+    .max(50, { message: 'Title is limited to only 50 characters' }),
+  imgUrl: z.string().optional(),
+  content: z.string().min(5, { message: 'Content must be at least 5 characters' }),
+});
+
+type PostFormValues = z.infer<typeof PostSchema>;
+
+const markdown = `
+# Hello World
+
+> The answer of life is [42](https://www.youtube.com/watch?v=dQw4w9WgXcQ "42").
+
+— R.A
+
+## Grocery List
++ Dairy
+  + [ ] Milk
+  + [ ] Cheese
++ Veggies
+  + [ ] Carrot
+  + [ ] Cauliflower
++ Mountain Dew
+
+The overriding design goal for Markdown's formatting syntax is to make it as readable as possible. The idea is that a Markdown-formatted document should be publishable as-is, as plain text, without looking like it's been marked up with tags or formatting instructions.
+
+\`This is an inline code example\`
+
+Below is a code block:
+\`\`\`js
+const red = "red";
+\`\`\`
+`;
+
+export const CreatePostForm = () => {
+  const form = useForm<PostFormValues>({
+    resolver: zodResolver(PostSchema),
+    defaultValues: {
+      title: '',
+      imgUrl: '',
+      content: markdown,
+    },
+  });
+
+  const ref = useRef<MDXEditorMethods>(null);
+
+  const onSubmit = async (data: PostFormValues) => {
+    console.log(data);
+  };
+
+  const handleBlur = () => {
+    if (ref.current) form.setValue('content', ref.current?.getMarkdown());
+  };
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md"
+      >
+        <div className="flex flex-col md:flex w-full gap-2">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormDescription></FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="imgUrl"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Image URL(optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormDescription></FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Content</FormLabel>
+                <FormControl>
+                  <Editor ref={ref} onBlur={handleBlur} value={field.value} />
+                </FormControl>
+                <FormDescription></FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Button className="w-full">Submit</Button>
+      </form>
+    </Form>
+  );
+};
