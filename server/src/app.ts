@@ -20,7 +20,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/v1/posts', postRouter);
 
-app.use(errorHandler);
 app.use(unknownEndpoint);
+app.use(errorHandler);
 
 export default app;
