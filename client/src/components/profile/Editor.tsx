@@ -30,10 +30,12 @@ export const Editor = ({
   ref,
   onBlur,
   value,
+  initialMD,
 }: {
   ref: React.RefObject<MDXEditorMethods | null>;
   onBlur: () => void;
   value: string;
+  initialMD: string;
 }) => {
   return (
     <MDXEditor
@@ -63,6 +65,7 @@ export const Editor = ({
               </div>
             </DiffSourceToggleWrapper>
           ),
+          toolbarClassName: 'toolbar',
         }),
         listsPlugin(),
         quotePlugin(),
@@ -76,7 +79,7 @@ export const Editor = ({
           codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text', tsx: 'TypeScript' },
         }),
 
-        diffSourcePlugin({ viewMode: 'rich-text', diffMarkdown: 'boo' }),
+        diffSourcePlugin({ viewMode: 'rich-text', diffMarkdown: initialMD }),
         markdownShortcutPlugin(),
       ]}
     />

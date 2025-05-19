@@ -50,7 +50,7 @@ Below is a code block:
 \`\`\`js
 const red = "red";
 \`\`\`
-`;
+`.trim();
 
 export const CreatePostForm = () => {
   const form = useForm<PostFormValues>({
@@ -69,7 +69,7 @@ export const CreatePostForm = () => {
   };
 
   const handleBlur = () => {
-    if (ref.current) form.setValue('content', ref.current?.getMarkdown());
+    if (ref.current) form.setValue('content', ref.current.getMarkdown());
   };
 
   return (
@@ -114,7 +114,7 @@ export const CreatePostForm = () => {
               <FormItem className="flex-1">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Editor ref={ref} onBlur={handleBlur} value={field.value} />
+                  <Editor ref={ref} onBlur={handleBlur} value={field.value} initialMD={markdown} />
                 </FormControl>
                 <FormDescription></FormDescription>
                 <FormMessage />
