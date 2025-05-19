@@ -55,6 +55,7 @@ export const post = pgTable('post', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: text('title').notNull(),
   slug: text('slug').notNull(),
+  imgUrl: text('img_url'),
   content: text('content').notNull(),
   userId: text('user_id')
     .notNull()
