@@ -7,56 +7,72 @@ import { ReadingListMenu } from './ReadingListMenu';
 import { ProfilePopover } from './ProfilePopover';
 import { toast } from 'sonner';
 
-export const Navbar = () => {
-  const { data, isPending } = authClient.useSession();
-
-  if (isPending)
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <Loading />
+const PublicButtons = () => {
+  return (
+    <>
+      <div className="hidden md:flex md:gap-1">
+        <ModeToggle />
+        <Button asChild>
+          <Link to="/auth">Login</Link>
+        </Button>
       </div>
-    );
+      <div className="md:hidden">
+        <ProfilePopover private={false}>
+          <Button asChild>
+            <Link to="/auth" className="w-full">
+              Login
+            </Link>
+          </Button>
+        </ProfilePopover>
+      </div>
+    </>
+  );
+};
+
+const PrivateButtons = () => {
+  return (
+    <>
+      <div className="hidden md:block mr-1">
+        <ModeToggle />
+      </div>
+      <ProfilePopover private={true}>
+        <Button
+          className="w-full"
+          onClick={async () => {
+            await authClient.signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  toast.success('Logged-out succesfully');
+                },
+              },
+            });
+          }}
+        >
+          Logout
+        </Button>
+      </ProfilePopover>
+    </>
+  );
+};
+
+export const Navbar = () => {
+  const { data: session, isPending } = authClient.useSession();
 
   return (
-    <header className="sticky top-0 z-10 border-b-2">
-      <nav className="w-full bg-background p-3 flex items-center justify-between">
-        <div>
+    <header className="sticky top-0 z-10 border-b-2 bg-background">
+      <nav className="flex justify-between items-center p-3">
+        <div className="flex-1">
           <ReadingListMenu />
         </div>
-        <h1 className="font-rammetto text-2xl md:text-3xl tracking-[0.3rem]">
+
+        <h1 className="flex-1 text-center font-rammetto text-2xl md:text-3xl tracking-[0.3rem]">
           <Link to="/">MUNI</Link>
         </h1>
-        <div className="flex gap-2 items-center">
-          {data && data.user ? (
-            <>
-              <div className="hidden md:block">
-                <ModeToggle />
-              </div>
-              <ProfilePopover>
-                <Button
-                  className="w-full"
-                  onClick={async () => {
-                    await authClient.signOut({
-                      fetchOptions: {
-                        onSuccess: () => {
-                          toast.success('Logged-out succesfully');
-                        },
-                      },
-                    });
-                  }}
-                >
-                  Logout
-                </Button>
-              </ProfilePopover>
-            </>
-          ) : (
-            <>
-              <ModeToggle />
-              <Button asChild>
-                <Link to="/auth">Sign in</Link>
-              </Button>
-            </>
-          )}
+
+        <div className="flex-1 flex justify-end">
+          <div className="flex w-[120px] justify-end">
+            {isPending ? <Loading /> : session ? <PrivateButtons /> : <PublicButtons />}
+          </div>
         </div>
       </nav>
     </header>
