@@ -15,12 +15,20 @@ import { Button } from '@/components/ui/button';
 import { Editor } from './Editor';
 import { useRef } from 'react';
 import { MDXEditorMethods } from '@mdxeditor/editor';
+import { useCreatePostMutation } from '@/hooks/usePost';
+import { authClient } from '@/lib/auth-client';
+import { Loading } from '../common/Loading';
+import { cn } from '@/lib/utils';
+import { Checkbox } from '../ui/checkbox';
+
+// TODO: add published type & checkbox to toggle this in UI
 const PostSchema = z.object({
   title: z
     .string()
     .min(5, { message: 'Title must be at least 5 characters' })
     .max(50, { message: 'Title is limited to only 50 characters' }),
   imgUrl: z.string().optional(),
+  published: z.boolean().default(false).optional(),
   content: z.string().min(5, { message: 'Content must be at least 5 characters' }),
 });
 
@@ -59,13 +67,21 @@ export const CreatePostForm = () => {
       title: '',
       imgUrl: '',
       content: markdown,
+      published: false,
     },
   });
 
   const ref = useRef<MDXEditorMethods>(null);
+  const mutation = useCreatePostMutation();
+  const { data: session } = authClient.useSession();
 
   const onSubmit = async (data: PostFormValues) => {
-    console.log(data);
+    mutation.mutate({
+      ...data,
+      published: data.published ?? false,
+      imgUrl: data.imgUrl || '',
+      userId: session?.user.id as string,
+    });
   };
 
   const handleBlur = () => {
@@ -76,9 +92,9 @@ export const CreatePostForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md"
+        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md max-w-[768px] mx-auto"
       >
-        <div className="flex flex-col md:flex w-full gap-2">
+        <div className="flex flex-col md:flex gap-2">
           <FormField
             control={form.control}
             name="title"
@@ -122,8 +138,31 @@ export const CreatePostForm = () => {
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="published"
+          render={({ field }) => (
+            <FormItem className="flex-1 flex flex-row items-start">
+              <FormControl>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
+              <FormLabel>Publish?</FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <Button className="w-full">Submit</Button>
+        <Button disabled={mutation.isPending} className="grid place-items-center w-full">
+          <span className={cn('col-[1] row-[1]', mutation.isPending ? 'invisible' : 'visible')}>
+            Publish
+          </span>
+          <span
+            aria-label="Uploading..."
+            className={cn('col-[1] row-[1]', mutation.isPending ? 'visible' : 'invisible')}
+          >
+            <Loading />
+          </span>
+        </Button>
       </form>
     </Form>
   );

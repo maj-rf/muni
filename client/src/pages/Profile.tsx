@@ -1,4 +1,5 @@
 import { Loading } from '@/components/common/Loading';
+import { ProfilePosts } from '@/components/profile/ProfilePosts';
 import { authClient } from '@/lib/auth-client';
 
 export const Profile = () => {
@@ -6,5 +7,11 @@ export const Profile = () => {
 
   if (isPending) return <Loading />;
 
-  return <div>Hello, {data?.user.name}</div>;
+  return (
+    <div>
+      <h2>Hello, {data?.user.name}</h2>
+
+      <ProfilePosts />
+    </div>
+  );
 };
