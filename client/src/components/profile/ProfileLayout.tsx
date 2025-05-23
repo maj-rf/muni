@@ -12,7 +12,7 @@ export const ProfileLayout = () => {
     );
   if (!session) return <Navigate to="/" />;
   return (
-    <div>
+    <div className="h-[calc(100dvh-60px)]">
       <Outlet />
     </div>
   );

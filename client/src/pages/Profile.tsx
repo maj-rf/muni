@@ -1,17 +1,13 @@
-import { Loading } from '@/components/common/Loading';
 import { ProfilePosts } from '@/components/profile/ProfilePosts';
-import { authClient } from '@/lib/auth-client';
+import { ProfileSidebar } from '@/components/profile/ProfileSidebar';
 
 export const Profile = () => {
-  const { data, isPending } = authClient.useSession();
-
-  if (isPending) return <Loading />;
-
   return (
-    <div>
-      <h2>Hello, {data?.user.name}</h2>
-
-      <ProfilePosts />
+    <div className="grid grid-cols-[auto_minmax(0,_1fr)] h-full">
+      <ProfileSidebar />
+      <div className="">
+        <ProfilePosts />
+      </div>
     </div>
   );
 };

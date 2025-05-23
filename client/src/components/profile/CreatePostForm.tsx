@@ -154,7 +154,7 @@ export const CreatePostForm = () => {
 
         <Button disabled={mutation.isPending} className="grid place-items-center w-full">
           <span className={cn('col-[1] row-[1]', mutation.isPending ? 'invisible' : 'visible')}>
-            Publish
+            Save
           </span>
           <span
             aria-label="Uploading..."
