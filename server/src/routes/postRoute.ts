@@ -3,6 +3,8 @@ import {
   createNewUserPost,
   PostSchema,
   getUserPosts,
+  getPostBySlug,
+  updateUserPost,
 } from '../controllers/postController.js';
 import express from 'express';
 import { checkAuth } from '../middlewares/checkAuth.js';
@@ -12,4 +14,6 @@ export const postRouter = express.Router();
 
 postRouter.get('/random', getRandomPost);
 postRouter.get('/profile', checkAuth, getUserPosts);
+postRouter.get('/profile/:slug', getPostBySlug);
+postRouter.patch('/profile/:id', checkAuth, validateBody(PostSchema), updateUserPost);
 postRouter.post('/create', checkAuth, validateBody(PostSchema), createNewUserPost);

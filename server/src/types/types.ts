@@ -11,6 +11,7 @@ export type TPost = {
 };
 
 export type TNewPost = Pick<TPost, 'title' | 'content' | 'imgUrl' | 'published' | 'slug'>;
+export type TUpdatePost = Omit<TPost, 'createdAt' | 'updatedAt'>;
 
 export type PublicUser = {
   id: string;
