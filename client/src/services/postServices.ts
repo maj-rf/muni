@@ -13,3 +13,13 @@ export const getUserPosts = async (): Promise<TPost[]> => {
   const { data } = await api.get('/posts/profile');
   return data;
 };
+
+export const getPostBySlug = async (slug: string): Promise<TPost> => {
+  const { data } = await api.get(`/posts/profile/${slug}`);
+  return data;
+};
+
+export const updatePost = async (obj: Omit<TPost, 'createdAt' | 'updatedAt'>): Promise<TPost> => {
+  const { data } = await api.patch(`/posts/profile/${obj.id}`, obj);
+  return data;
+};
