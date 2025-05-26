@@ -9,6 +9,7 @@ import { RandomPost } from './components/posts/RandomPost';
 import { ProfileCreatePost } from './pages/ProfileCreatePost';
 import { Profile } from './pages/Profile';
 import { ProfileLayout } from './components/profile/ProfileLayout';
+import { ProfileEditPost } from './pages/ProfileEditPost';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -30,6 +31,10 @@ export const routesConfig: RouteObject[] = [
           {
             path: '/profile/write',
             element: <ProfileCreatePost />,
+          },
+          {
+            path: '/profile/edit/:slug',
+            element: <ProfileEditPost />,
           },
         ],
       },
