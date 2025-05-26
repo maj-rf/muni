@@ -14,6 +14,6 @@ export const errorHandler: ErrorRequestHandler = (
     status = error.status;
     errorMessage = error.message;
   }
-  res.status(status).json({ error: errorMessage });
+  res.status(status).json({ message: errorMessage });
   next();
 };

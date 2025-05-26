@@ -7,6 +7,8 @@ import { Home } from './pages/Home';
 import { Post } from './pages/Post';
 import { RandomPost } from './components/posts/RandomPost';
 import { ProfileCreatePost } from './pages/ProfileCreatePost';
+import { Profile } from './pages/Profile';
+import { ProfileLayout } from './components/profile/ProfileLayout';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -19,7 +21,17 @@ export const routesConfig: RouteObject[] = [
       },
       {
         path: '/profile',
-        element: <ProfileCreatePost />,
+        element: <ProfileLayout />,
+        children: [
+          {
+            index: true,
+            element: <Profile />,
+          },
+          {
+            path: '/profile/write',
+            element: <ProfileCreatePost />,
+          },
+        ],
       },
       {
         path: '/posts/random',

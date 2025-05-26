@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router';
 import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner';
 
 const RegisterSchema = z
   .object({
@@ -70,7 +71,13 @@ export const Register = () => {
         onError: (ctx) => {
           // display the error message
           setLoading(false);
-          alert(ctx.error.message);
+          toast.error('Error signing-in', {
+            description: ctx.error.message,
+            action: {
+              label: <>X</>,
+              onClick: () => {},
+            },
+          });
         },
       },
     );

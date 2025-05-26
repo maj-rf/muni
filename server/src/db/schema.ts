@@ -54,8 +54,10 @@ export const verification = pgTable('verification', {
 export const post = pgTable('post', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: text('title').notNull(),
-  slug: text('slug').notNull(),
+  slug: text('slug').notNull().unique(),
+  imgUrl: text('img_url'),
   content: text('content').notNull(),
+  published: boolean('published').notNull().default(false),
   userId: text('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
