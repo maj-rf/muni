@@ -86,3 +86,9 @@ export const updateUserPost = async (req: Request, res: Response) => {
 };
 
 // deletePost
+export const deleteUserPost = async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const user = assertUser(req);
+  await postQueries.deletePost(id, user.id);
+  res.status(204).json({ message: 'Post deleted!' });
+};

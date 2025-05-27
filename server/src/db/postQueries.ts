@@ -36,3 +36,8 @@ export async function updatePost(update: TUpdatePost) {
     .returning();
   return result[0];
 }
+
+// TODO: check for Drizzle errors? malformed ids, etc
+export async function deletePost(postId: string, userId: string) {
+  return await db.delete(post).where(and(eq(post.id, postId), eq(post.userId, userId)));
+}
