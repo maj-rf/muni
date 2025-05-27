@@ -1,15 +1,23 @@
-import { createPost, getPostBySlug, getUserPosts, updatePost } from '@/services/postServices';
+import {
+  createPost,
+  deletePost,
+  getPostBySlug,
+  getUserPosts,
+  updatePost,
+} from '@/services/postServices';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 export function useCreatePostMutation() {
   const queryClient = useQueryClient();
+  const to = useNavigate();
   return useMutation({
     mutationFn: createPost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', { type: 'profile' }] });
       toast.success('Post created');
+      to('/profile', { replace: true });
     },
   });
 }
@@ -44,5 +52,13 @@ export function useEditPostMutation() {
       toast.success('Post updated');
       to('/profile', { replace: true });
     },
+  });
+}
+
+export function useDeletePostMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deletePost,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posts', { type: 'profile' }] }),
   });
 }

@@ -23,3 +23,8 @@ export const updatePost = async (obj: Omit<TPost, 'createdAt' | 'updatedAt'>): P
   const { data } = await api.patch(`/posts/profile/${obj.id}`, obj);
   return data;
 };
+
+export const deletePost = async (id: string) => {
+  const { data } = await api.delete(`/posts/profile/${id}`);
+  return data;
+};
