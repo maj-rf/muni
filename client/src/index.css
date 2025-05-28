@@ -127,13 +127,18 @@
 }
 
 @layer utilities {
+
+  .prose > * {
+    color: var(--color-primary)
+  }
+
    .prose code {
-    --baseBg: white;
-    @apply text-pink-400 before:content-none after:content-none;
+    --baseBg: transparent;
+    @apply text-pink-400 dark:text-pink-300 before:content-none after:content-none;
   }
 
   .prose a {
-    @apply text-blue-500
+    @apply text-blue-500 dark:text-blue-400
   }
 
   .prose blockquote {
@@ -142,5 +147,17 @@
 
   .prose ::marker {
     @apply text-stone-600;
+  }
+
+  .visible-nav {
+  /* display: flex; */
+  top: 0;
+  transition: top 0.4s ease-out;
+  }
+
+  .hidden-nav {
+  /* display: none; */
+  top: -80px;
+  transition: top 0.4s ease-out;
   }
 }

@@ -21,7 +21,7 @@ export const ProfilePosts = () => {
         {data?.map((post) => (
           <li key={post.id}>
             <Link
-              to={`/posts/${post.id}`}
+              to={`/posts/${post.slug}`}
               className="w-full underline decoration-amber-400 dark:decoration-indigo-300 underline-offset-2"
             >
               <h2>{post.title}</h2>

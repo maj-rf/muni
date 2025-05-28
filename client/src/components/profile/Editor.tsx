@@ -39,7 +39,6 @@ export const Editor = ({
 }) => {
   return (
     <MDXEditor
-      className="bg-amber-50 dark:bg-gray-100 w-full rounded-2xl "
       ref={ref}
       onBlur={onBlur}
       contentEditableClassName="prose"

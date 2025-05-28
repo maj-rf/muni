@@ -43,7 +43,7 @@ export const routesConfig: RouteObject[] = [
         element: <RandomPost />,
       },
       {
-        path: '/posts/:id',
+        path: '/posts/:slug',
         element: <Post />,
       },
     ],
