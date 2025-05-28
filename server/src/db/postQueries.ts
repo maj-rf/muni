@@ -24,8 +24,18 @@ export async function insertNewPost(userId: string, obj: TNewPost) {
 }
 
 export async function findPostBySlug(slug: string) {
-  const result = await db.select().from(post).where(eq(post.slug, slug));
-  return result[0];
+  // const result = await db.select().from(post).where(eq(post.slug, slug));
+  const result = await db.query.post.findFirst({
+    where: eq(post.slug, slug),
+    with: {
+      author: {
+        columns: {
+          name: true,
+        },
+      },
+    },
+  });
+  return result;
 }
 
 export async function updatePost(update: TUpdatePost) {

@@ -10,6 +10,12 @@ export type TPost = {
   updatedAt: Date;
 };
 
+export type TPublicPost = TPost & {
+  author: {
+    name: string;
+  };
+};
+
 export type TNewPost = Pick<TPost, 'title' | 'content' | 'imgUrl' | 'published' | 'slug'>;
 export type TUpdatePost = Omit<TPost, 'createdAt' | 'updatedAt'>;
 
