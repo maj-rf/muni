@@ -1,4 +1,4 @@
-import { TNewPost, TPost } from '@/types/types';
+import { TNewPost, TPost, TPublicPost } from '@/types/types';
 import { api } from './api';
 
 export const getRandomPost = async () => {
@@ -14,7 +14,7 @@ export const getUserPosts = async (): Promise<TPost[]> => {
   return data;
 };
 
-export const getPostBySlug = async (slug: string): Promise<TPost> => {
+export const getPostBySlug = async (slug: string): Promise<TPublicPost> => {
   const { data } = await api.get(`/posts/profile/${slug}`);
   return data;
 };
