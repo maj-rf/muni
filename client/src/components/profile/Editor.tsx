@@ -34,6 +34,7 @@ export const Editor = ({
 }: {
   ref: React.RefObject<MDXEditorMethods | null>;
   onBlur: () => void;
+
   value: string;
   initialMD: string;
 }) => {

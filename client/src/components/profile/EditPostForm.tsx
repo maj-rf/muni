@@ -34,6 +34,8 @@ const PostSchema = z.object({
 
 type PostFormValues = z.infer<typeof PostSchema>;
 
+// TODO: when checking some checkbox and saving the form,
+// visiting the updated post will have the checkbox unchecked.
 export const EditPostForm = ({ post }: { post: TPost }) => {
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostSchema),
@@ -56,18 +58,16 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
   const { data: session } = authClient.useSession();
 
   const onSubmit = async (data: PostFormValues) => {
+    const content = ref.current?.getMarkdown() || '';
     mutation.mutate({
       ...data,
+      content,
       id: post.id,
       published: data.published ?? false,
       imgUrl: data.imgUrl || '',
       userId: session?.user.id as string,
       slug: post.slug,
     });
-  };
-
-  const handleBlur = () => {
-    if (ref.current) form.setValue('content', ref.current.getMarkdown());
   };
 
   return (
@@ -114,7 +114,7 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
                 <FormControl>
                   <Editor
                     ref={ref}
-                    onBlur={handleBlur}
+                    onBlur={field.onBlur}
                     value={field.value}
                     initialMD={post.content}
                   />
