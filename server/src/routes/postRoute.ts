@@ -5,6 +5,7 @@ import { validateBody } from '../middlewares/validation.js';
 
 export const postRouter = express.Router();
 
+postRouter.get('/recent', postController.getRecentPosts);
 postRouter.get('/random', postController.getRandomPost);
 postRouter.get('/profile', checkAuth, postController.getUserPosts);
 postRouter.get('/profile/:slug', postController.getPostBySlug);

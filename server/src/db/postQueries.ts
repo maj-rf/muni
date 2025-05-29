@@ -1,4 +1,4 @@
-import { eq, and } from 'drizzle-orm';
+import { eq, and, asc } from 'drizzle-orm';
 import { db } from './index.js';
 import { post } from './schema.js';
 import type { TNewPost, TUpdatePost } from '../types/types.js';
@@ -50,4 +50,19 @@ export async function updatePost(update: TUpdatePost) {
 // TODO: check for Drizzle errors? malformed ids, etc
 export async function deletePost(postId: string, userId: string) {
   return await db.delete(post).where(and(eq(post.id, postId), eq(post.userId, userId)));
+}
+
+export async function findRecentPosts() {
+  return await db.query.post.findMany({
+    where: eq(post.published, true),
+    orderBy: [asc(post.createdAt)],
+    limit: 5,
+    with: {
+      author: {
+        columns: {
+          name: true,
+        },
+      },
+    },
+  });
 }

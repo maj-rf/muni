@@ -92,3 +92,8 @@ export const deleteUserPost = async (req: Request, res: Response) => {
   await postQueries.deletePost(id, user.id);
   res.status(204).json({ message: 'Post deleted!' });
 };
+
+export const getRecentPosts = async (_req: Request, res: Response) => {
+  const posts = await postQueries.findRecentPosts();
+  res.json(posts);
+};
