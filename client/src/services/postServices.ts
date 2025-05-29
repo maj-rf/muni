@@ -28,3 +28,8 @@ export const deletePost = async (id: string) => {
   const { data } = await api.delete(`/posts/profile/${id}`);
   return data;
 };
+
+export const getRecentPost = async (): Promise<TPublicPost[]> => {
+  const { data } = await api.get('/posts/recent');
+  return data;
+};

@@ -2,6 +2,7 @@ import {
   createPost,
   deletePost,
   getPostBySlug,
+  getRecentPost,
   getUserPosts,
   updatePost,
 } from '@/services/postServices';
@@ -23,7 +24,7 @@ export function useCreatePostMutation() {
 }
 
 export function useGetRecentPosts() {
-  return useQuery({ queryFn: () => {}, queryKey: ['posts', { type: 'recent' }] });
+  return useQuery({ queryFn: getRecentPost, queryKey: ['posts', { type: 'recent' }] });
 }
 
 export function useGetProfilePosts() {
