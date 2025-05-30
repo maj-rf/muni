@@ -37,8 +37,11 @@ export const PostSingle = ({ slug }: { slug: string }) => {
           />
         </picture>
 
-        <div className="w-full mx-auto p-4 prose lg:prose-xl">
+        <div className="w-full mx-auto p-4 prose lg:prose-lg">
           <PostMarkdown markdown={post.content} />
+        </div>
+        <div className="px-4 my-2 flex justify-end w-full text-sm text-muted-foreground">
+          Last Updated on {new Date(post.updatedAt).toLocaleDateString()}
         </div>
       </div>
     </section>

@@ -18,7 +18,7 @@ export const PostsBentoItem = ({ variant, post }: BentoItem) => {
         <div className="overflow-hidden relative">
           <img
             src={post.imgUrl}
-            alt={post.title + 'image'}
+            alt={post.title + ' image'}
             className={cn(
               'h-full max-h-[400px] w-[1024px] aspect-square object-cover object-center ease-in-out duration-500 group-hover:scale-115',
               { 'lg:aspect-[5/8] lg:max-h-none': variant === 'big' },
@@ -30,7 +30,7 @@ export const PostsBentoItem = ({ variant, post }: BentoItem) => {
         </div>
 
         <div className="p-2 text-center">
-          <h2 className="font-semibold text-lg text-center">{post.title}</h2>
+          <h2 className="font-semibold text-center line-clamp-1">{post.title}</h2>
         </div>
       </Link>
     </div>
