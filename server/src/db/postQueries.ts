@@ -1,4 +1,4 @@
-import { eq, and, asc } from 'drizzle-orm';
+import { eq, and, asc, sql } from 'drizzle-orm';
 import { db } from './index.js';
 import { post } from './schema.js';
 import type { TNewPost, TUpdatePost } from '../types/types.js';
@@ -41,7 +41,7 @@ export async function findPostBySlug(slug: string) {
 export async function updatePost(update: TUpdatePost) {
   const result = await db
     .update(post)
-    .set({ ...update })
+    .set({ ...update, updatedAt: new Date() })
     .where(and(eq(post.id, update.id), eq(post.userId, update.userId)))
     .returning();
   return result[0];
@@ -65,4 +65,14 @@ export async function findRecentPosts() {
       },
     },
   });
+}
+
+export async function findRandomPost() {
+  const result = await db
+    .select()
+    .from(post)
+    .where(eq(post.published, true))
+    .orderBy(sql`RANDOM()`)
+    .limit(1);
+  return result[0];
 }

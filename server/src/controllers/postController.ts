@@ -33,8 +33,9 @@ export const PostSchema = z.object({
   }),
 });
 
-export const getRandomPost = (_req: Request, res: Response) => {
-  res.json({ title: 'Hello', content: 'Hello World' });
+export const getRandomPost = async (_req: Request, res: Response) => {
+  const post = await postQueries.findRandomPost();
+  res.json(post);
 };
 
 export const createNewUserPost = async (req: Request, res: Response) => {
