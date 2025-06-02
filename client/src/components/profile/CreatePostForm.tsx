@@ -91,7 +91,7 @@ export const CreatePostForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md max-w-[768px] mx-auto"
+        className="p-4 space-y-5 border rounded-md max-w-[768px] mx-auto"
       >
         <div className="flex flex-col md:flex gap-2">
           <FormField

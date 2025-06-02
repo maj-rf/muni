@@ -72,10 +72,7 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-5 border rounded-md">
         <div className="flex flex-col md:flex gap-2">
           <FormField
             control={form.control}

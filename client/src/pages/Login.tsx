@@ -59,10 +59,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="p-6 space-y-5 border text-primary bg-primary-foreground rounded-md"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-5 border rounded-md">
         <FormField
           control={form.control}
           name="email"
@@ -92,7 +89,7 @@ const LoginForm = () => {
           )}
         />
         <Button className="w-full" disabled={loading}>
-          Submit
+          Login
         </Button>
         <Button variant="link" asChild>
           <Link to="/auth/register" className="w-full">
