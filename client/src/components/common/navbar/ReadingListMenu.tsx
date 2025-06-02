@@ -14,7 +14,7 @@ import {
 const components: { title: string; href: string; description: string }[] = [
   {
     title: 'Surprise Me!',
-    href: '/random',
+    href: '/posts/random',
     description: 'Read a random public blog. Let the universe decide.',
   },
   {

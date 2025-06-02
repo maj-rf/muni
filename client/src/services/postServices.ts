@@ -1,4 +1,4 @@
-import { TNewPost, TPost } from '@/types/types';
+import { TNewPost, TPost, TPublicPost } from '@/types/types';
 import { api } from './api';
 
 export const getRandomPost = async () => {
@@ -11,5 +11,25 @@ export const createPost = async (newPost: TNewPost) => {
 
 export const getUserPosts = async (): Promise<TPost[]> => {
   const { data } = await api.get('/posts/profile');
+  return data;
+};
+
+export const getPostBySlug = async (slug: string): Promise<TPublicPost> => {
+  const { data } = await api.get(`/posts/profile/${slug}`);
+  return data;
+};
+
+export const updatePost = async (obj: Omit<TPost, 'createdAt' | 'updatedAt'>): Promise<TPost> => {
+  const { data } = await api.patch(`/posts/profile/${obj.id}`, obj);
+  return data;
+};
+
+export const deletePost = async (id: string) => {
+  const { data } = await api.delete(`/posts/profile/${id}`);
+  return data;
+};
+
+export const getRecentPost = async (): Promise<TPublicPost[]> => {
+  const { data } = await api.get('/posts/recent');
   return data;
 };

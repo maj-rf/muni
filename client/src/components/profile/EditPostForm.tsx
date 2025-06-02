@@ -15,11 +15,12 @@ import { Button } from '@/components/ui/button';
 import { Editor } from './Editor';
 import { useRef } from 'react';
 import { MDXEditorMethods } from '@mdxeditor/editor';
-import { useCreatePostMutation } from '@/hooks/usePost';
-import { authClient } from '@/lib/auth-client';
 import { Loading } from '../common/Loading';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
+import { TPost } from '@/types/types';
+import { useEditPostMutation } from '@/hooks/usePost';
+import { authClient } from '@/lib/auth-client';
 
 const PostSchema = z.object({
   title: z
@@ -33,65 +34,47 @@ const PostSchema = z.object({
 
 type PostFormValues = z.infer<typeof PostSchema>;
 
-const markdown = `
-# Hello World
-
-> The answer of life is [42](https://www.youtube.com/watch?v=dQw4w9WgXcQ "42").
-
-— R.A
-
-## Grocery List
-+ Dairy
-  + [ ] Milk
-  + [ ] Cheese
-+ Veggies
-  + [ ] Carrot
-  + [ ] Cauliflower
-+ Mountain Dew
-
-The overriding design goal for Markdown's formatting syntax is to make it as readable as possible. The idea is that a Markdown-formatted document should be publishable as-is, as plain text, without looking like it's been marked up with tags or formatting instructions.
-
-\`This is an inline code example\`
-
-Below is a code block:
-\`\`\`js
-const red = "red";
-\`\`\`
-`.trim();
-
-export const CreatePostForm = () => {
+// TODO: when checking some checkbox and saving the form,
+// visiting the updated post will have the checkbox unchecked.
+export const EditPostForm = ({ post }: { post: TPost }) => {
   const form = useForm<PostFormValues>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
       title: '',
       imgUrl: '',
-      content: markdown,
-      published: false,
+      content: 'Hello, World',
+      published: true,
+    },
+    values: {
+      title: post.title,
+      imgUrl: post.imgUrl,
+      content: `${post.content}`.trim(),
+      published: post.published,
     },
   });
 
   const ref = useRef<MDXEditorMethods>(null);
-  const mutation = useCreatePostMutation();
+  const mutation = useEditPostMutation();
   const { data: session } = authClient.useSession();
 
   const onSubmit = async (data: PostFormValues) => {
+    const content = ref.current?.getMarkdown() || '';
     mutation.mutate({
       ...data,
+      content,
+      id: post.id,
       published: data.published ?? false,
       imgUrl: data.imgUrl || '',
       userId: session?.user.id as string,
+      slug: post.slug,
     });
-  };
-
-  const handleBlur = () => {
-    if (ref.current) form.setValue('content', ref.current.getMarkdown());
   };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md max-w-[768px] mx-auto"
+        className="p-4 space-y-5 border text-primary bg-primary-foreground rounded-md"
       >
         <div className="flex flex-col md:flex gap-2">
           <FormField
@@ -129,7 +112,12 @@ export const CreatePostForm = () => {
               <FormItem className="flex-1">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Editor ref={ref} onBlur={handleBlur} value={field.value} initialMD={markdown} />
+                  <Editor
+                    ref={ref}
+                    onBlur={field.onBlur}
+                    value={field.value}
+                    initialMD={post.content}
+                  />
                 </FormControl>
                 <FormDescription></FormDescription>
                 <FormMessage />
@@ -151,12 +139,12 @@ export const CreatePostForm = () => {
           )}
         />
 
-        <Button disabled={mutation.isPending} className="grid place-items-center w-full">
+        <Button disabled={false} className="grid place-items-center w-full">
           <span className={cn('col-[1] row-[1]', mutation.isPending ? 'invisible' : 'visible')}>
             Save
           </span>
           <span
-            aria-label="Uploading..."
+            aria-label="Updating..."
             className={cn('col-[1] row-[1]', mutation.isPending ? 'visible' : 'invisible')}
           >
             <Loading />

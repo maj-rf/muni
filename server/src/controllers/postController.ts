@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import z from 'zod';
 import createHttpError from 'http-errors';
-import { findAuthorPosts, insertNewPost } from '../db/postQueries.js';
+import * as postQueries from '../db/postQueries.js';
 import type { PublicUser, TNewPost } from '../types/types.js';
 import { generateSlug } from '../lib/generateSlug.js';
 
@@ -16,9 +16,9 @@ function assertUser(req: Request): PublicUser {
   return user;
 }
 
-function assertPostBody(req: Request): Omit<TNewPost, 'slug'> {
-  const { title, imgUrl, content, published } = req.body;
-  return { title, imgUrl, content, published };
+function assertPostBody(req: Request): TNewPost {
+  const { title, imgUrl, content, published, slug } = req.body;
+  return { title, imgUrl, content, published, slug };
 }
 
 export const PostSchema = z.object({
@@ -33,15 +33,16 @@ export const PostSchema = z.object({
   }),
 });
 
-export const getRandomPost = (_req: Request, res: Response) => {
-  res.json({ title: 'Hello', content: 'Hello World' });
+export const getRandomPost = async (_req: Request, res: Response) => {
+  const post = await postQueries.findRandomPost();
+  res.json(post);
 };
 
 export const createNewUserPost = async (req: Request, res: Response) => {
   const user = assertUser(req);
   const { title, imgUrl, content, published } = assertPostBody(req);
   const slug = await generateSlug(title);
-  const newPost = await insertNewPost(user.id, {
+  const newPost = await postQueries.insertNewPost(user.id, {
     title,
     imgUrl: !imgUrl ? DEFAULT_IMG_URL : imgUrl.trim(),
     content,
@@ -53,15 +54,47 @@ export const createNewUserPost = async (req: Request, res: Response) => {
 
 // getRecentPosts
 
-// getPosts
 export const getUserPosts = async (req: Request, res: Response) => {
   const user = assertUser(req);
-  const posts = await findAuthorPosts(user.id);
+  const posts = await postQueries.findAuthorPosts(user.id);
   res.json(posts);
 };
 
-// getPost
+export const getPostBySlug = async (req: Request, res: Response) => {
+  const post = await postQueries.findPostBySlug(req.params.slug as string);
+  res.json(post);
+};
 
-// updatePost
+export const updateUserPost = async (req: Request, res: Response) => {
+  const user = assertUser(req);
+  const body = assertPostBody(req);
+  const id = req.params.id as string;
+
+  /**
+   * Scenarios:
+   * 1. Same title => No slug update, use current slug
+   * 2. Different title => generate new slug, use new slug,
+   */
+  const post = await postQueries.findPostBySlug(body.slug);
+  const posts = await postQueries.updatePost({
+    ...body,
+    imgUrl: !body.imgUrl ? DEFAULT_IMG_URL : body.imgUrl.trim(),
+    slug: post?.title === body.title ? body.slug : await generateSlug(body.title),
+    userId: user.id,
+    id,
+  });
+  res.json(posts);
+};
 
 // deletePost
+export const deleteUserPost = async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+  const user = assertUser(req);
+  await postQueries.deletePost(id, user.id);
+  res.status(204).json({ message: 'Post deleted!' });
+};
+
+export const getRecentPosts = async (_req: Request, res: Response) => {
+  const posts = await postQueries.findRecentPosts();
+  res.json(posts);
+};

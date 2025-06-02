@@ -34,12 +34,12 @@ export const Editor = ({
 }: {
   ref: React.RefObject<MDXEditorMethods | null>;
   onBlur: () => void;
+
   value: string;
   initialMD: string;
 }) => {
   return (
     <MDXEditor
-      className="bg-amber-50 dark:bg-gray-100 w-full max-w-fit mx-auto rounded-2xl "
       ref={ref}
       onBlur={onBlur}
       contentEditableClassName="prose"

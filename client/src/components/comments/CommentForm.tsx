@@ -43,15 +43,12 @@ export const CommentForm = ({ id }: { id: string }) => {
         </div>
       ) : (
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex w-full items-center space-x-2"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-1">
             <FormField
               control={form.control}
               name="content"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Comment</FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} type="string" />
@@ -61,7 +58,7 @@ export const CommentForm = ({ id }: { id: string }) => {
                 </FormItem>
               )}
             />
-            <Button className="">Submit</Button>
+            <Button className="mt-3">Add Comment</Button>
           </form>
         </Form>
       )}
