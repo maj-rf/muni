@@ -10,7 +10,7 @@ export const ProfilePopover = (props: PropsWithChildren<{ private: boolean }>) =
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="ghost" size="icon">
           {props.private ? <CircleUserRound className="size-6" /> : <MenuIcon className="size-6" />}
         </Button>
       </PopoverTrigger>

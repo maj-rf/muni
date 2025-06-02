@@ -6,8 +6,9 @@ import { Loading } from '../Loading';
 import { ReadingListMenu } from './ReadingListMenu';
 import { ProfilePopover } from './ProfilePopover';
 import { toast } from 'sonner';
-import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useControlNavOnScroll } from '@/hooks/useControlNavOnScroll';
+
 const PublicButtons = () => {
   return (
     <>
@@ -58,27 +59,17 @@ const PrivateButtons = () => {
 
 export const Navbar = () => {
   const { data: session, isPending } = authClient.useSession();
+  const visible = useControlNavOnScroll();
 
-  const [position, setPosition] = useState(window.pageYOffset);
-  const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    const handleScroll = () => {
-      const moving = window.pageYOffset;
-
-      setVisible(position > moving);
-      setPosition(moving);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  });
   return (
     <header
-      className={cn('sticky top-0 z-10 border-b-2 bg-background', {
-        'visible-nav': visible,
-        'hidden-nav': !visible,
-      })}
+      className={cn(
+        'sticky top-0 z-50 w-full transition-transform duration-300 border-b-1 bg-background/90',
+        {
+          'translate-y-0': visible,
+          '-translate-y-full': !visible,
+        },
+      )}
     >
       <nav className="flex justify-between items-center p-3">
         <div className="flex-1">
