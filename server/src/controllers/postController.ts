@@ -1,25 +1,10 @@
 import type { Request, Response } from 'express';
 import z from 'zod';
-import createHttpError from 'http-errors';
 import * as postQueries from '../db/postQueries.js';
-import type { PublicUser, TNewPost } from '../types/types.js';
 import { generateSlug } from '../lib/generateSlug.js';
-
+import { assertUser, assertPostBody } from '../lib/assertUtils.js';
 const DEFAULT_IMG_URL =
   'https://images.unsplash.com/photo-1617575521317-d2974f3b56d2?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-
-function assertUser(req: Request): PublicUser {
-  const user = req.user as PublicUser | undefined;
-  if (!user) {
-    throw createHttpError(401, 'Unauthenticated');
-  }
-  return user;
-}
-
-function assertPostBody(req: Request): TNewPost {
-  const { title, imgUrl, content, published, slug } = req.body;
-  return { title, imgUrl, content, published, slug };
-}
 
 export const PostSchema = z.object({
   body: z.object({
