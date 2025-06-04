@@ -14,18 +14,18 @@ export const CommentSchema = z.object({
 
 // new
 export const createNewComment = async (req: Request, res: Response) => {
-  const slug = req.params.slug as string;
+  const postId = req.params.postId as string;
   const { content } = assertCommentBody(req);
   console.log(content);
   const user = assertUser(req);
-  const comment = await commentQueries.insertComment(user.id, slug, { content });
+  const comment = await commentQueries.insertComment(user.id, postId, { content });
   res.json(comment);
 };
 
 // findAll
 export const getPostComments = async (req: Request, res: Response) => {
-  const slug = req.params.slug as string;
-  const comments = await commentQueries.findCommentsBySlug(slug);
+  const postId = req.params.postId as string;
+  const comments = await commentQueries.findCommentsByPostId(postId);
   res.json(comments);
 };
 

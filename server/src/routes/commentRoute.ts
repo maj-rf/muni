@@ -6,6 +6,6 @@ import { validateBody } from '../middlewares/validation.js';
 export const commentRouter = express.Router();
 const checkAuthAndValidateCommentBody = [checkAuth, validateBody(commentController.CommentSchema)];
 
-commentRouter.get('/:slug', commentController.getPostComments);
-commentRouter.post('/:slug', checkAuthAndValidateCommentBody, commentController.createNewComment);
-commentRouter.delete('/:slug/:commentId', checkAuth, commentController.deleteComment);
+commentRouter.get('/:postId', commentController.getPostComments);
+commentRouter.post('/:postId', checkAuthAndValidateCommentBody, commentController.createNewComment);
+commentRouter.delete('/:postId/:commentId', checkAuth, commentController.deleteComment);
