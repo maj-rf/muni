@@ -4,6 +4,7 @@ import { timeSince } from '@/lib/utils';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { Navigate } from 'react-router';
 
 const PostMarkdown = ({ markdown }: { markdown: string }) => {
   return (
@@ -17,6 +18,8 @@ export const PostSingle = ({ slug }: { slug: string }) => {
   const { data: post, isPending, isError, error } = useGetPostBySlug(slug);
   if (isPending) return <Loading />;
   if (isError) return <div>Failed to fetch post: {error.message}</div>;
+  //TODO: should i really navigate here if post is undefined?
+  if (!post) return <Navigate to="/" />;
 
   return (
     <section>
