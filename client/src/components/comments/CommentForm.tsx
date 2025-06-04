@@ -1,4 +1,3 @@
-import { authClient } from '@/lib/auth-client';
 import {
   Form,
   FormControl,
@@ -13,55 +12,64 @@ import { Input } from '../ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { OctagonAlert } from 'lucide-react';
+import { useNewComment } from '@/hooks/useComment';
+import { cn } from '@/lib/utils';
+import { Loading } from '../common/Loading';
+
 const CommentSchema = z.object({
   content: z
     .string()
-    .min(3, { message: 'Minimum comment length must be at least 3 characters' })
-    .max(500, { message: 'Maximum comment length must be at most 500 characters' }),
+    .min(5, { message: 'Minimum comment length must be at least 5 characters' })
+    .max(300, { message: 'Maximum comment length must be at most 300 characters' }),
 });
 type CommentFormValues = z.infer<typeof CommentSchema>;
-export const CommentForm = ({ id }: { id: string }) => {
-  const { data } = authClient.useSession();
+
+export const CommentForm = ({ slug }: { slug: string }) => {
   const form = useForm<CommentFormValues>({
     resolver: zodResolver(CommentSchema),
     defaultValues: {
       content: '',
     },
   });
+  const createComment = useNewComment(slug);
 
   const onSubmit = (values: CommentFormValues) => {
-    console.log(values, id);
+    createComment.mutate({ slug: slug, content: values.content });
   };
 
   return (
     <div>
-      {!data?.session ? (
-        <div className="flex items-center gap-2 px-4 py-2 bg-linear-65 from-rose-500 to-pink-600 text-white">
-          <OctagonAlert className="h-4 w-4" strokeWidth="3" />
-          <p>Please login to comment!</p>
-        </div>
-      ) : (
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-1">
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Comment</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} type="string" />
-                  </FormControl>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button className="mt-3">Add Comment</Button>
-          </form>
-        </Form>
-      )}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-1">
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Comment</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} type="string" />
+                </FormControl>
+                <FormDescription></FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button disabled={false} className="mt-3 grid place-items-center">
+            <span
+              className={cn('col-[1] row-[1]', createComment.isPending ? 'invisible' : 'visible')}
+            >
+              Add Comment
+            </span>
+            <span
+              aria-label="Adding Comment..."
+              className={cn('col-[1] row-[1]', createComment.isPending ? 'visible' : 'invisible')}
+            >
+              <Loading />
+            </span>
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };
