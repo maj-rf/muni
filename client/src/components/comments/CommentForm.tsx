@@ -24,17 +24,17 @@ const CommentSchema = z.object({
 });
 type CommentFormValues = z.infer<typeof CommentSchema>;
 
-export const CommentForm = ({ slug }: { slug: string }) => {
+export const CommentForm = ({ postId }: { postId: string }) => {
   const form = useForm<CommentFormValues>({
     resolver: zodResolver(CommentSchema),
     defaultValues: {
       content: '',
     },
   });
-  const createComment = useNewComment(slug);
+  const createComment = useNewComment(postId);
 
   const onSubmit = (values: CommentFormValues) => {
-    createComment.mutate({ slug: slug, content: values.content });
+    createComment.mutate({ postId, content: values.content });
   };
 
   return (

@@ -12,13 +12,13 @@ const PleaseLogin = () => {
   );
 };
 
-export const Comments = ({ slug }: { slug: string }) => {
+export const Comments = ({ postId }: { postId: string }) => {
   const { data } = authClient.useSession();
 
   return (
     <div className="rounded-lg overflow-hidden max-w-[768px] mx-auto">
-      {!data?.session ? <PleaseLogin /> : <CommentForm slug={slug} />}
-      <CommentList slug={slug} />
+      {!data?.session ? <PleaseLogin /> : <CommentForm postId={postId} />}
+      <CommentList postId={postId} />
     </div>
   );
 };

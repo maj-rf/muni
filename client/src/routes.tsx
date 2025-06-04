@@ -10,11 +10,13 @@ import { Profile } from './pages/Profile';
 import { ProfileLayout } from './components/profile/ProfileLayout';
 import { ProfileEditPost } from './pages/ProfileEditPost';
 import { getRandomPost } from './services/postServices';
+import ErrorPage from './pages/ErrorPage';
 
 export const routesConfig: RouteObject[] = [
   {
     path: '/',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -59,6 +61,7 @@ export const routesConfig: RouteObject[] = [
   {
     path: '/auth',
     element: <AuthLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/auth/register',

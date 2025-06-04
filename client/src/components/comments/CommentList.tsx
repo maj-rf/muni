@@ -12,8 +12,8 @@ const Comment = ({ comment }: { comment: TComment }) => {
   );
 };
 
-export const CommentList = ({ slug }: { slug: string }) => {
-  const { data, isPending, error } = useGetComments(slug);
+export const CommentList = ({ postId }: { postId: string }) => {
+  const { data, isPending, error } = useGetComments(postId);
 
   if (isPending) return <Loading />;
   if (error)

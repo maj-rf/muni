@@ -3,20 +3,20 @@ import * as commentService from '../services/commentService';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 
-export function useGetComments(slug: string) {
+export function useGetComments(postId: string) {
   return useQuery({
-    queryKey: ['comments', { slug }],
-    queryFn: () => commentService.getPostComments(slug),
+    queryKey: ['comments', { postId }],
+    queryFn: () => commentService.getPostComments(postId),
     retry: false,
   });
 }
 
-export function useNewComment(slug: string) {
+export function useNewComment(postId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: commentService.addComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', { slug }] });
+      queryClient.invalidateQueries({ queryKey: ['comments', { postId }] });
     },
     onError: (error) => {
       toast.error(error instanceof AxiosError ? error?.response?.data.message : error.message);
@@ -24,12 +24,12 @@ export function useNewComment(slug: string) {
   });
 }
 
-export function useDeleteComment(slug: string) {
+export function useDeleteComment(postId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: commentService.deleteComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', { slug }] });
+      queryClient.invalidateQueries({ queryKey: ['comments', { postId }] });
     },
   });
 }

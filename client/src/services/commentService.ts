@@ -1,23 +1,29 @@
 import { TComment } from '@/types/types';
 import { api } from './api';
 
-export const getPostComments = async (slug: string): Promise<TComment[]> => {
-  const { data } = await api.get(`/comments/${slug}`);
+export const getPostComments = async (postId: string): Promise<TComment[]> => {
+  const { data } = await api.get(`/comments/${postId}`);
   return data;
 };
 
 export const addComment = async ({
-  slug,
+  postId,
   content,
 }: {
-  slug: string;
+  postId: string;
   content: string;
 }): Promise<TComment> => {
-  const { data } = await api.post(`/comments/${slug}`, { content });
+  const { data } = await api.post(`/comments/${postId}`, { content });
   return data;
 };
 
-export const deleteComment = async ({ slug, commentId }: { slug: string; commentId: string }) => {
-  const { data } = await api.delete(`/comments/${slug}/${commentId}`);
+export const deleteComment = async ({
+  postId,
+  commentId,
+}: {
+  postId: string;
+  commentId: string;
+}) => {
+  const { data } = await api.delete(`/comments/${postId}/${commentId}`);
   return data;
 };
