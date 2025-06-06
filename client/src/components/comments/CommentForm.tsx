@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -19,8 +19,9 @@ import { Loading } from '../common/Loading';
 const CommentSchema = z.object({
   content: z
     .string()
-    .min(5, { message: 'Minimum comment length must be at least 5 characters' })
-    .max(300, { message: 'Maximum comment length must be at most 300 characters' }),
+    .trim()
+    .min(5, { message: 'Minimum comment length is 5 characters' })
+    .max(300, { message: 'Maximum comment length is 300 characters' }),
 });
 type CommentFormValues = z.infer<typeof CommentSchema>;
 
@@ -35,12 +36,16 @@ export const CommentForm = ({ postId }: { postId: string }) => {
 
   const onSubmit = (values: CommentFormValues) => {
     createComment.mutate({ postId, content: values.content });
+    form.reset();
   };
 
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-1">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col sm:flex-row items-center gap-2 mb-2 px-2 md:px-0"
+        >
           <FormField
             control={form.control}
             name="content"
@@ -48,14 +53,17 @@ export const CommentForm = ({ postId }: { postId: string }) => {
               <FormItem className="w-full">
                 <FormLabel>Comment</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} type="string" />
+                  <Textarea placeholder="" {...field} className="resize-none" />
                 </FormControl>
-                <FormDescription></FormDescription>
+                <FormDescription>Please be respectful & be mindful of your words!</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button disabled={false} className="mt-3 grid place-items-center">
+          <Button
+            disabled={false}
+            className="sm:mt-[22px] grid place-items-center self-start w-full sm:w-fit"
+          >
             <span
               className={cn('col-[1] row-[1]', createComment.isPending ? 'invisible' : 'visible')}
             >

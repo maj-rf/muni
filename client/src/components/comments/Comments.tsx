@@ -18,7 +18,7 @@ export const Comments = ({ postId }: { postId: string }) => {
   return (
     <div className="rounded-lg overflow-hidden max-w-[768px] mx-auto">
       {!data?.session ? <PleaseLogin /> : <CommentForm postId={postId} />}
-      <CommentList postId={postId} />
+      <CommentList postId={postId} userId={data?.session.userId} />
     </div>
   );
 };
