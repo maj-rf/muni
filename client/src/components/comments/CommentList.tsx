@@ -16,9 +16,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Fragment } from 'react/jsx-runtime';
 
 const DeleteCommentAlert = ({ postId, commentId }: { postId: string; commentId: string }) => {
-  const mutate = useDeleteComment(postId);
+  const mutate = useDeleteComment(postId, commentId);
 
   const handleDelete = () => {
     mutate.mutate({ postId, commentId });
@@ -26,11 +27,8 @@ const DeleteCommentAlert = ({ postId, commentId }: { postId: string; commentId: 
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Button
-          variant="destructive"
-          className="hidden absolute top-1 right-0 group-data-[state=true]:block"
-        >
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" className="absolute top-1 right-0">
           <Trash />
         </Button>
       </AlertDialogTrigger>
@@ -51,41 +49,55 @@ const DeleteCommentAlert = ({ postId, commentId }: { postId: string; commentId: 
 };
 
 const Comment = ({ comment, userId }: { comment: TComment; userId: string | undefined }) => {
+  const owner = userId === comment.userId;
   return (
-    <li
-      className="p-3 flex flex-col md:flex-row gap-2 group relative border-b"
-      data-state={userId === comment.userId ? true : false}
-    >
+    <li className="p-3 flex flex-col md:flex-row gap-2 relative border-b">
       <div className="flex-1 flex gap-2 md:gap-0 flex-row md:flex-col">
         <div>{comment.author.name}</div>
         <p className="text-muted-foreground">{timeSince(new Date(comment.createdAt))} ago</p>
       </div>
       <p className="flex-5 w-full justify-self-start">{comment.content}</p>
-      <DeleteCommentAlert postId={comment.postId} commentId={comment.id} />
+      {owner && <DeleteCommentAlert postId={comment.postId} commentId={comment.id} />}
     </li>
   );
 };
 
 export const CommentList = ({ postId, userId }: { postId: string; userId: string | undefined }) => {
-  const { data, isPending, error } = useGetComments(postId);
+  const { data, isLoading, error, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useGetComments(postId);
 
-  if (isPending) return <Loading />;
+  if (isLoading) return <Loading />;
   if (error)
     return <div>{error instanceof AxiosError ? error.response?.data.message : error.message}</div>;
+  if (data?.pages[0].length === 0 || !data)
+    return (
+      <div className="p-2 bg-accent">
+        <div>Be the first to comment!</div>
+      </div>
+    );
 
-  //TODO: add delete button
   return (
     <div className="p-2 bg-accent">
-      {data.length === 0 ? (
-        <div>Be the first to comment!</div>
-      ) : (
-        <ul>
-          <div>Comments ({data.length})</div>
-          {data.map((c) => (
-            <Comment key={c.id} comment={c} userId={userId} />
-          ))}
-        </ul>
-      )}
+      <ul>
+        {data.pages.map((page, idx) => {
+          return (
+            <Fragment key={idx}>
+              {page.map((c) => (
+                <Comment key={c.id} comment={c} userId={userId} />
+              ))}
+            </Fragment>
+          );
+        })}
+      </ul>
+
+      <Button
+        className="w-full"
+        variant="ghost"
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+      >
+        {isFetchingNextPage ? 'Loading more...' : hasNextPage ? 'Load More' : 'End Of Comments'}
+      </Button>
     </div>
   );
 };

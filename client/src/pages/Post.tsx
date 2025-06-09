@@ -22,7 +22,8 @@ export const Post = () => {
   const { data: post, isPending, isError, error } = useGetPostBySlug(params.slug as string);
   if (isPending) return <PostSkeleton />;
   if (isError) return <div>Failed to fetch post: {error.message}</div>;
-  if (!post) return <div className="w-full flex items-center justify-center">No post found.</div>;
+  if (!post)
+    return <div className="w-full flex items-center justify-center p-8">Post not found.</div>;
   return (
     <div className="w-full md:max-w-5/6 mx-auto py-4">
       <PostSingle post={post} />

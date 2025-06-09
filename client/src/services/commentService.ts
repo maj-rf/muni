@@ -1,8 +1,8 @@
 import { TComment } from '@/types/types';
 import { api } from './api';
 
-export const getPostComments = async (postId: string): Promise<TComment[]> => {
-  const { data } = await api.get(`/comments/${postId}`);
+export const getPostComments = async (postId: string, page: number = 0): Promise<TComment[]> => {
+  const { data } = await api.get(`/comments/${postId}?page=${page}`);
   return data;
 };
 
