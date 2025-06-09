@@ -25,7 +25,8 @@ export const createNewComment = async (req: Request, res: Response) => {
 // findAll
 export const getPostComments = async (req: Request, res: Response) => {
   const postId = req.params.postId as string;
-  const comments = await commentQueries.findCommentsByPostId(postId);
+  const page = req.query.page ? Number(req.query.page) : 0;
+  const comments = await commentQueries.findCommentsByPostId(postId, page);
   res.json(comments);
 };
 
