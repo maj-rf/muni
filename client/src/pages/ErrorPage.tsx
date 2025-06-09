@@ -6,35 +6,34 @@ export default function ErrorPage() {
   console.error(error);
 
   let errorMessage: string;
+  let errorStatus: number = 500;
   if (isRouteErrorResponse(error)) {
     // error is type `ErrorResponse`
     errorMessage = error.data.message || error.statusText;
+    errorStatus = error.status;
   } else if (error instanceof Error) {
     errorMessage = error.message;
   } else if (typeof error === 'string') {
     errorMessage = error;
   } else {
-    console.error(error);
     errorMessage = 'Unknown error';
   }
 
   return (
-    <div
-      id="error-page"
-      className="h-screen bg-gradient-to-tr from-blue-400 to-emerald-400 dark:from-blue-600 dark:to-emerald-600"
-    >
-      <div className="flex flex-col justify-center items-center h-full gap-2 z-0">
-        <h1>Oops! 😭 </h1>
-        <p>Sorry, an unexpected error has occurred.</p>
-        <p className="font-bold text-xl">
-          <i>{errorMessage}</i>
-        </p>
-        <Button>
-          <Link to="/" replace={true}>
-            Go Back
-          </Link>
-        </Button>
+    <section className="grid h-screen place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+      <div className="text-center">
+        <div className="text-base font-semibold text-indigo-600">{errorStatus}</div>
+        <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
+          {errorMessage}
+        </h1>
+        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <Button>
+            <Link to="/" replace={true}>
+              Go Back
+            </Link>
+          </Button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
