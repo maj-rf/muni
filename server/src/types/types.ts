@@ -10,6 +10,19 @@ export type TPost = {
   updatedAt: Date;
 };
 
+export type TComment = {
+  id: string;
+  postId: string;
+  content: string;
+  userId: string;
+  createdAt: Date;
+  author: {
+    name: string;
+  };
+};
+
+export type TNewComment = Pick<TComment, 'content'>;
+
 export type TPublicPost = TPost & {
   author: {
     name: string;

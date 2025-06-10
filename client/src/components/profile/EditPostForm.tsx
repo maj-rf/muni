@@ -25,7 +25,7 @@ import { authClient } from '@/lib/auth-client';
 const PostSchema = z.object({
   title: z
     .string()
-    .min(5, { message: 'Title must be at least 5 characters' })
+    .min(8, { message: 'Title must be at least 8 characters' })
     .max(50, { message: 'Title is limited to only 50 characters' }),
   imgUrl: z.string().optional(),
   published: z.boolean().default(false).optional(),

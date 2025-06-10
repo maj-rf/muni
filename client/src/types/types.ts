@@ -17,3 +17,16 @@ export type TPublicPost = TPost & {
 };
 
 export type TNewPost = Pick<TPost, 'title' | 'content' | 'userId' | 'imgUrl' | 'published'>;
+
+export type TComment = {
+  id: string;
+  postId: string;
+  content: string;
+  userId: string;
+  createdAt: Date;
+  author: {
+    name: string;
+  };
+};
+
+export type TNewComment = Pick<TComment, 'content'>;

@@ -4,21 +4,13 @@ import { checkAuth } from '../middlewares/checkAuth.js';
 import { validateBody } from '../middlewares/validation.js';
 
 export const postRouter = express.Router();
+const checkAuthAndValidateBody = [checkAuth, validateBody(postController.PostSchema)];
 
 postRouter.get('/recent', postController.getRecentPosts);
 postRouter.get('/random', postController.getRandomPost);
 postRouter.get('/profile', checkAuth, postController.getUserPosts);
-postRouter.get('/profile/:slug', postController.getPostBySlug);
-postRouter.patch(
-  '/profile/:id',
-  checkAuth,
-  validateBody(postController.PostSchema),
-  postController.updateUserPost,
-);
-postRouter.delete('/profile/:id', checkAuth, postController.deleteUserPost);
-postRouter.post(
-  '/create',
-  checkAuth,
-  validateBody(postController.PostSchema),
-  postController.createNewUserPost,
-);
+
+postRouter.get('/:slug', postController.getPostBySlug);
+postRouter.patch('/:id', checkAuthAndValidateBody, postController.updateUserPost);
+postRouter.delete('/:id', checkAuth, postController.deleteUserPost);
+postRouter.post('/', checkAuthAndValidateBody, postController.createNewUserPost);

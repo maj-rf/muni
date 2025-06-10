@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { corsOptions } from './config/corsConfig.js';
 import { postRouter } from './routes/postRoute.js';
+import { commentRouter } from './routes/commentRoute.js';
 
 const app = express();
 app.disable('x-powered-by').use(morgan('dev')).use(cors(corsOptions));
@@ -20,6 +21,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/comments', commentRouter);
 
 app.use(unknownEndpoint);
 app.use(errorHandler);
