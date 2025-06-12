@@ -13,8 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Editor } from './Editor';
-import { useRef } from 'react';
-import { MDXEditorMethods } from '@mdxeditor/editor';
 import { Loading } from '../common/Loading';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../ui/checkbox';
@@ -53,15 +51,12 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
     },
   });
 
-  const ref = useRef<MDXEditorMethods>(null);
   const mutation = useEditPostMutation();
   const { data: session } = authClient.useSession();
 
   const onSubmit = async (data: PostFormValues) => {
-    const content = ref.current?.getMarkdown() || '';
     mutation.mutate({
       ...data,
-      content,
       id: post.id,
       published: data.published ?? false,
       imgUrl: data.imgUrl || '',
@@ -109,12 +104,7 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
               <FormItem className="flex-1">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Editor
-                    ref={ref}
-                    onBlur={field.onBlur}
-                    value={field.value}
-                    initialMD={post.content}
-                  />
+                  <Editor field={{ ...field }} />
                 </FormControl>
                 <FormDescription></FormDescription>
                 <FormMessage />

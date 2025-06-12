@@ -13,8 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Editor } from './Editor';
-import { useRef } from 'react';
-import { MDXEditorMethods } from '@mdxeditor/editor';
 import { useCreatePostMutation } from '@/hooks/usePost';
 import { authClient } from '@/lib/auth-client';
 import { Loading } from '../common/Loading';
@@ -70,7 +68,6 @@ export const CreatePostForm = () => {
     },
   });
 
-  const ref = useRef<MDXEditorMethods>(null);
   const mutation = useCreatePostMutation();
   const { data: session } = authClient.useSession();
 
@@ -81,10 +78,6 @@ export const CreatePostForm = () => {
       imgUrl: data.imgUrl || '',
       userId: session?.user.id as string,
     });
-  };
-
-  const handleBlur = () => {
-    if (ref.current) form.setValue('content', ref.current.getMarkdown());
   };
 
   return (
@@ -129,7 +122,7 @@ export const CreatePostForm = () => {
               <FormItem className="flex-1">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Editor ref={ref} onBlur={handleBlur} value={field.value} initialMD={markdown} />
+                  <Editor field={{ ...field }} />
                 </FormControl>
                 <FormDescription></FormDescription>
                 <FormMessage />
