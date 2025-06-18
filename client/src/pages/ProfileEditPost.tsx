@@ -1,13 +1,13 @@
 import { Loading } from '@/components/common/Loading';
 import { EditPostForm } from '@/components/profile/EditPostForm';
 import { Button } from '@/components/ui/button';
-import { useGetPostBySlug } from '@/hooks/usePost';
+import { useGetProfilePost } from '@/hooks/usePost';
 import { ArrowBigLeft } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 export const ProfileEditPost = () => {
   const to = useNavigate();
   const params = useParams();
-  const { data: post, isPending } = useGetPostBySlug(params.slug as string);
+  const { data: post, isPending } = useGetProfilePost(params.id as string);
 
   if (isPending)
     return (

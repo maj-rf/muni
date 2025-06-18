@@ -1,11 +1,14 @@
 import { PostMarkdown } from '@/components/posts/PostMarkdown';
-import { useLocation } from 'react-router';
+import { useParams } from 'react-router';
 import { timeSince } from '@/lib/utils';
+import { useGetProfilePost } from '@/hooks/usePost';
+import { Loading } from '@/components/common/Loading';
 
 export const ProfilePreviewPost = () => {
-  const location = useLocation();
-  const { post } = location.state;
-
+  const params = useParams();
+  const { data: post, isPending } = useGetProfilePost(params.id as string);
+  if (isPending) return <Loading />;
+  if (!post) return <div>Post not found</div>;
   // TODO: add scroll to top
   return (
     <section className="relative">
@@ -13,7 +16,6 @@ export const ProfilePreviewPost = () => {
         <div className="text-center mb-4">
           <div className="text-lg font-bold">{post.title}</div>
           <div>
-            {post.author && `by ${post.author.name} | `}
             <span className="text-muted-foreground">{timeSince(new Date(post.createdAt))} ago</span>
           </div>
         </div>

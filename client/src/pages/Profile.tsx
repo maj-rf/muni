@@ -13,7 +13,6 @@ export const Profile = () => {
         <Loading />
       </div>
     );
-  // TODO: remove link state and just use query in item component?
   return (
     <div>
       <div>Your Posts</div>
@@ -21,8 +20,7 @@ export const Profile = () => {
         {data?.map((post) => (
           <li key={post.id}>
             <Link
-              to={`/profile/preview/${post.slug}`}
-              state={{ post: post }}
+              to={`/profile/preview/${post.id}`}
               className="w-full underline decoration-amber-400 dark:decoration-indigo-300 underline-offset-2"
             >
               <h2>{post.title}</h2>
@@ -40,7 +38,7 @@ export const Profile = () => {
                 {post.published ? 'Published' : 'Draft'}
               </div>
               <p className="text-muted-foreground">{timeSince(new Date(post.createdAt))} ago</p>
-              <Link to={`/profile/edit/${post.slug}`}>Edit</Link>
+              <Link to={`/profile/edit/${post.id}`}>Edit</Link>
               <DeletePostAlert postId={post.id} title={post.title} />
             </div>
           </li>

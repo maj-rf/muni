@@ -36,11 +36,11 @@ export const routesConfig: RouteObject[] = [
             element: <ProfileCreatePost />,
           },
           {
-            path: '/profile/edit/:slug',
+            path: '/profile/edit/:id',
             element: <ProfileEditPost />,
           },
           {
-            path: '/profile/preview/:slug',
+            path: '/profile/preview/:id',
             element: <ProfilePreviewPost />,
           },
         ],

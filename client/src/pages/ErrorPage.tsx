@@ -1,5 +1,6 @@
 import { useRouteError, isRouteErrorResponse, Link } from 'react-router';
 import { Button } from '@/components/ui/button';
+import { isAxiosError } from 'axios';
 
 export default function ErrorPage() {
   const error = useRouteError();
@@ -7,7 +8,10 @@ export default function ErrorPage() {
 
   let errorMessage: string;
   let errorStatus: number = 500;
-  if (isRouteErrorResponse(error)) {
+  if (isAxiosError(error)) {
+    errorMessage = error.response?.data.message;
+    errorStatus = error.status as number;
+  } else if (isRouteErrorResponse(error)) {
     // error is type `ErrorResponse`
     errorMessage = error.data.message || error.statusText;
     errorStatus = error.status;
@@ -20,10 +24,10 @@ export default function ErrorPage() {
   }
 
   return (
-    <section className="grid h-screen place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+    <section className="grid h-screen place-items-center bg-background text-foreground px-6 py-24 sm:py-32 lg:px-8">
       <div className="text-center">
-        <div className="text-base font-semibold text-indigo-600">{errorStatus}</div>
-        <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
+        <div className="font-semibold text-indigo-600 text-3xl">{errorStatus}</div>
+        <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">
           {errorMessage}
         </h1>
         <div className="mt-10 flex items-center justify-center gap-x-6">

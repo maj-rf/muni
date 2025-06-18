@@ -13,7 +13,7 @@ import { useDeletePostMutation } from '@/hooks/usePost';
 import { toast } from 'sonner';
 
 export const DeletePostAlert = ({ postId, title }: { postId: string; title: string }) => {
-  const mutate = useDeletePostMutation();
+  const mutate = useDeletePostMutation(postId);
 
   const handleDelete = () => {
     toast.promise(mutate.mutateAsync(postId), {

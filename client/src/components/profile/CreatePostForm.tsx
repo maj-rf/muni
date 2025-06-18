@@ -82,10 +82,7 @@ export const CreatePostForm = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="p-4 space-y-5 border rounded-md max-w-[768px] mx-auto"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-5 border rounded-md">
         <div className="flex flex-col md:flex gap-2">
           <FormField
             control={form.control}

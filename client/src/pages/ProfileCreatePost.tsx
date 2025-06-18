@@ -6,7 +6,7 @@ export const ProfileCreatePost = () => {
   const to = useNavigate();
   return (
     <section>
-      <Button className="ml-4 mb-2" onClick={() => to(-1)}>
+      <Button className="mb-2" onClick={() => to(-1)}>
         <ArrowBigLeft />
         <span>Back</span>
       </Button>

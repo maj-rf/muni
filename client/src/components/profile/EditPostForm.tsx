@@ -51,7 +51,7 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
     },
   });
 
-  const mutation = useEditPostMutation();
+  const mutation = useEditPostMutation(post.id);
   const { data: session } = authClient.useSession();
 
   const onSubmit = async (data: PostFormValues) => {
