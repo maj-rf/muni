@@ -1,10 +1,10 @@
-import { eq, and, asc, sql } from 'drizzle-orm';
+import { eq, and, asc, sql, getTableColumns } from 'drizzle-orm';
 import { db } from './index.js';
-import { post } from './schema.js';
+import { post, user } from './schema.js';
 import type { TNewPost, TUpdatePost } from '../types/types.js';
 
 export async function findAuthorPosts(userId: string) {
-  return await db.select().from(post).where(eq(post.userId, userId));
+  return await db.select().from(post).where(eq(post.userId, userId)).orderBy(asc(post.createdAt));
 }
 
 export async function insertNewPost(userId: string, obj: TNewPost) {
@@ -25,17 +25,19 @@ export async function insertNewPost(userId: string, obj: TNewPost) {
 
 export async function findPostBySlug(slug: string) {
   // const result = await db.select().from(post).where(eq(post.slug, slug));
-  const result = await db.query.post.findFirst({
-    where: eq(post.slug, slug),
-    with: {
+
+  const result = await db
+    .select({
+      ...getTableColumns(post),
       author: {
-        columns: {
-          name: true,
-        },
+        name: user.name,
       },
-    },
-  });
-  return result;
+    })
+    .from(post)
+    .leftJoin(user, eq(post.userId, user.id))
+    .where(eq(post.slug, slug))
+    .limit(1);
+  return result[0];
 }
 
 export async function updatePost(update: TUpdatePost) {

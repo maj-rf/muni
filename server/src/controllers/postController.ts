@@ -37,8 +37,6 @@ export const createNewUserPost = async (req: Request, res: Response) => {
   res.json(newPost);
 };
 
-// getRecentPosts
-
 export const getUserPosts = async (req: Request, res: Response) => {
   const user = assertUser(req);
   const posts = await postQueries.findAuthorPosts(user.id);
@@ -47,6 +45,10 @@ export const getUserPosts = async (req: Request, res: Response) => {
 
 export const getPostBySlug = async (req: Request, res: Response) => {
   const post = await postQueries.findPostBySlug(req.params.slug as string);
+  if (!post || !post.published) {
+    res.json([]);
+    return;
+  }
   res.json(post);
 };
 
