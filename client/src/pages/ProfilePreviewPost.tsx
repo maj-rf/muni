@@ -1,10 +1,14 @@
+import { PostMarkdown } from '@/components/posts/PostMarkdown';
+import { useLocation } from 'react-router';
 import { timeSince } from '@/lib/utils';
-import { TPublicPost } from '@/types/types';
-import { PostMarkdown } from './PostMarkdown';
 
-export const PostSingle = ({ post }: { post: TPublicPost }) => {
+export const ProfilePreviewPost = () => {
+  const location = useLocation();
+  const { post } = location.state;
+
+  // TODO: add scroll to top
   return (
-    <section>
+    <section className="relative">
       <div className="max-w-[768px] mx-auto">
         <div className="text-center mb-4">
           <div className="text-lg font-bold">{post.title}</div>

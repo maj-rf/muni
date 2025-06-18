@@ -1,5 +1,4 @@
 import { Loading } from '@/components/common/Loading';
-import { SectionWrapper } from '@/components/common/SectionWrapper';
 import { EditPostForm } from '@/components/profile/EditPostForm';
 import { Button } from '@/components/ui/button';
 import { useGetPostBySlug } from '@/hooks/usePost';
@@ -12,34 +11,29 @@ export const ProfileEditPost = () => {
 
   if (isPending)
     return (
-      <SectionWrapper>
-        <Button className="ml-4 mb-2" onClick={() => to(-1)}>
-          <ArrowBigLeft />
-          <span>Back</span>
-        </Button>
-        <div className="mx-auto max-w-[768px]">
-          <Loading />
-        </div>
-      </SectionWrapper>
+      <section>
+        <Loading />
+      </section>
     );
+
   if (!post)
     return (
-      <SectionWrapper>
-        <Button className="ml-4 mb-2" onClick={() => to(-1)}>
+      <section>
+        <Button className="mb-2" onClick={() => to(-1)}>
           <ArrowBigLeft />
           <span>Back</span>
         </Button>
         <div>No post found!</div>
-      </SectionWrapper>
+      </section>
     );
 
   return (
-    <SectionWrapper>
-      <Button className="ml-4 mb-2" onClick={() => to(-1)}>
+    <section>
+      <Button className="mb-2" onClick={() => to(-1)}>
         <ArrowBigLeft />
         <span>Back</span>
       </Button>
       <EditPostForm post={post} />
-    </SectionWrapper>
+    </section>
   );
 };

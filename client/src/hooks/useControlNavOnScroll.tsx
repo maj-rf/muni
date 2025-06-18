@@ -4,9 +4,9 @@ export function useControlNavOnScroll() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
+    let lastScrollY = window.pageYOffset;
     function controlNav() {
-      const currentScrollY = window.scrollY;
+      const currentScrollY = window.pageYOffset;
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setVisible(false);
       } else {
