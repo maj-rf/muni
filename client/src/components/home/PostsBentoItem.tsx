@@ -20,7 +20,7 @@ export const PostsBentoItem = ({ variant, post }: BentoItem) => {
         alt={post.title + ' image'}
         className="w-full h-full object-cover object-center ease-in-out duration-500 group-hover:scale-115"
       />
-      <div className="w-full bg-linear-10 from-pink-500 to-white/70 backdrop-blur-sm absolute bottom-0 text-right p-2 text-black text-sm">
+      <div className="w-full bg-linear-20 from-primary to-white/80 backdrop-blur-sm absolute bottom-0 text-right p-2 text-black text-sm">
         <p className="line-clamp-1">{post.title}</p>
         <p>By {post.author.name}</p>
       </div>

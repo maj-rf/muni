@@ -11,7 +11,7 @@ export const ProfileLayout = () => {
         <Loading />
       </div>
     );
-  if (!session) return <Navigate to="/" />;
+  if (!session) return <Navigate to="/auth" />;
   return (
     <div className="h-[calc(100dvh-60px)]">
       <div className="grid grid-cols-[auto_minmax(0,_1fr)] h-full">
