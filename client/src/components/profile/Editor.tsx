@@ -16,7 +16,7 @@ export const Editor = ({
 }) => {
   return (
     <div>
-      <MDEditor value={field.value} onChange={field.onChange} height={400} />
+      <MDEditor value={field.value} onChange={field.onChange} height={400} preview="edit" />
     </div>
   );
 };

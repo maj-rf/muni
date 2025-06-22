@@ -74,17 +74,17 @@ export const Navbar = () => {
         },
       )}
     >
-      <nav className="flex justify-between items-center p-3">
-        <div className="flex-1">
+      <nav className="flex items-center justify-between p-3">
+        <div className="grow-1 basis-0">
           <ReadingListMenu />
         </div>
 
-        <h1 className="flex-1 text-center font-rammetto text-2xl md:text-3xl tracking-[0.3rem]">
+        <h1 className="font-rammetto text-2xl md:text-3xl tracking-[0.3rem]">
           <Link to="/">MUNI</Link>
         </h1>
 
-        <div className="flex-1 flex justify-end">
-          <div className="flex w-[120px] justify-end">
+        <div className="grow-1 basis-0 ml-auto">
+          <div className="flex justify-end">
             {isPending ? <Loading /> : session ? <PrivateButtons /> : <PublicButtons />}
           </div>
         </div>

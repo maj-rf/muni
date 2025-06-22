@@ -128,7 +128,7 @@ export const EditPostForm = ({ post }: { post: TPost }) => {
 
         <Button disabled={false} className="grid place-items-center w-full">
           <span className={cn('col-[1] row-[1]', mutation.isPending ? 'invisible' : 'visible')}>
-            Save
+            Save Changes
           </span>
           <span
             aria-label="Updating..."

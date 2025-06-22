@@ -129,7 +129,6 @@
     @apply bg-background text-foreground;
     font-family: var(--font-karla);
   }
-
 }
 
 @layer utilities {
@@ -159,5 +158,12 @@
   
   .prose a {
     --tw-prose-links: var(--prose-link);
+  }
+  
+  .w-md-editor-preview {
+    & ol,ul,menu{
+      list-style: unset;
+    }
+    
   }
 }
