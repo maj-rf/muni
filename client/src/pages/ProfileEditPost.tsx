@@ -1,45 +1,28 @@
 import { Loading } from '@/components/common/Loading';
-import { SectionWrapper } from '@/components/common/SectionWrapper';
 import { EditPostForm } from '@/components/profile/EditPostForm';
-import { Button } from '@/components/ui/button';
-import { useGetPostBySlug } from '@/hooks/usePost';
-import { ArrowBigLeft } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router';
+import { useGetProfilePost } from '@/hooks/usePost';
+import { useParams } from 'react-router';
 export const ProfileEditPost = () => {
-  const to = useNavigate();
   const params = useParams();
-  const { data: post, isPending } = useGetPostBySlug(params.slug as string);
+  const { data: post, isPending } = useGetProfilePost(params.id as string);
 
   if (isPending)
     return (
-      <SectionWrapper>
-        <Button className="ml-4 mb-2" onClick={() => to(-1)}>
-          <ArrowBigLeft />
-          <span>Back</span>
-        </Button>
-        <div className="mx-auto max-w-[768px]">
-          <Loading />
-        </div>
-      </SectionWrapper>
+      <section>
+        <Loading />
+      </section>
     );
+
   if (!post)
     return (
-      <SectionWrapper>
-        <Button className="ml-4 mb-2" onClick={() => to(-1)}>
-          <ArrowBigLeft />
-          <span>Back</span>
-        </Button>
+      <section>
         <div>No post found!</div>
-      </SectionWrapper>
+      </section>
     );
 
   return (
-    <SectionWrapper>
-      <Button className="ml-4 mb-2" onClick={() => to(-1)}>
-        <ArrowBigLeft />
-        <span>Back</span>
-      </Button>
+    <section>
       <EditPostForm post={post} />
-    </SectionWrapper>
+    </section>
   );
 };

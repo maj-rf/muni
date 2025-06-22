@@ -1,15 +1,21 @@
+import { PostMarkdown } from '@/components/posts/PostMarkdown';
+import { useParams } from 'react-router';
 import { timeSince } from '@/lib/utils';
-import { TPublicPost } from '@/types/types';
-import { PostMarkdown } from './PostMarkdown';
+import { useGetProfilePost } from '@/hooks/usePost';
+import { Loading } from '@/components/common/Loading';
 
-export const PostSingle = ({ post }: { post: TPublicPost }) => {
+export const ProfilePreviewPost = () => {
+  const params = useParams();
+  const { data: post, isPending } = useGetProfilePost(params.id as string);
+  if (isPending) return <Loading />;
+  if (!post) return <div>Post not found</div>;
+  // TODO: add scroll to top
   return (
-    <section>
+    <section className="relative">
       <div className="max-w-[768px] mx-auto">
         <div className="text-center mb-4">
           <div className="text-lg font-bold">{post.title}</div>
           <div>
-            {post.author && `by ${post.author.name} | `}
             <span className="text-muted-foreground">{timeSince(new Date(post.createdAt))} ago</span>
           </div>
         </div>

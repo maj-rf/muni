@@ -9,6 +9,7 @@ const checkAuthAndValidateBody = [checkAuth, validateBody(postController.PostSch
 postRouter.get('/recent', postController.getRecentPosts);
 postRouter.get('/random', postController.getRandomPost);
 postRouter.get('/profile', checkAuth, postController.getUserPosts);
+postRouter.get('/profile/:id', checkAuth, postController.getUserSinglePost);
 
 postRouter.get('/:slug', postController.getPostBySlug);
 postRouter.patch('/:id', checkAuthAndValidateBody, postController.updateUserPost);

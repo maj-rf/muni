@@ -15,6 +15,11 @@ export const getUserPosts = async (): Promise<TPost[]> => {
   return data;
 };
 
+export const getUserSinglePost = async (id: string): Promise<TPost> => {
+  const { data } = await api.get(`/posts/profile/${id}`);
+  return data;
+};
+
 export const getPostBySlug = async (slug: string): Promise<TPublicPost> => {
   const { data } = await api.get(`/posts/${slug}`);
   return data;

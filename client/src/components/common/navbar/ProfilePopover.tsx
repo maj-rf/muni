@@ -31,7 +31,7 @@ export const ProfilePopover = (props: PropsWithChildren<{ private: boolean }>) =
             </>
           )}
 
-          <li className="md:hidden p-2">
+          <li className="md:hidden p-2 flex items-center gap-2">
             Theme: <ModeToggle />
           </li>
           <li>{props.children}</li>

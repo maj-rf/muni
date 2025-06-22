@@ -11,6 +11,7 @@ import { ProfileLayout } from './components/profile/ProfileLayout';
 import { ProfileEditPost } from './pages/ProfileEditPost';
 import { getRandomPost } from './services/postServices';
 import ErrorPage from './pages/ErrorPage';
+import { ProfilePreviewPost } from './pages/ProfilePreviewPost';
 
 export const routesConfig: RouteObject[] = [
   {
@@ -35,8 +36,12 @@ export const routesConfig: RouteObject[] = [
             element: <ProfileCreatePost />,
           },
           {
-            path: '/profile/edit/:slug',
+            path: '/profile/edit/:id',
             element: <ProfileEditPost />,
+          },
+          {
+            path: '/profile/preview/:id',
+            element: <ProfilePreviewPost />,
           },
         ],
       },

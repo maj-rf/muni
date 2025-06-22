@@ -8,6 +8,7 @@ import { ProfilePopover } from './ProfilePopover';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useControlNavOnScroll } from '@/hooks/useControlNavOnScroll';
+import { useQueryClient } from '@tanstack/react-query';
 
 const PublicButtons = () => {
   return (
@@ -32,6 +33,7 @@ const PublicButtons = () => {
 };
 
 const PrivateButtons = () => {
+  const queryClient = useQueryClient();
   return (
     <>
       <div className="hidden md:block mr-1">
@@ -44,6 +46,7 @@ const PrivateButtons = () => {
             await authClient.signOut({
               fetchOptions: {
                 onSuccess: () => {
+                  queryClient.removeQueries();
                   toast.success('Logged-out succesfully');
                 },
               },

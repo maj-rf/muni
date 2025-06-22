@@ -1,22 +1,31 @@
-import { NotebookPen, Bookmark } from 'lucide-react';
+import { Notebook, NotebookPen } from 'lucide-react';
 import { NavLink } from 'react-router';
 import { cn } from '@/lib/utils';
 import clsx from 'clsx';
 const sidebarLinks = [
   {
     to: '/profile',
-    icon: <NotebookPen className="group-[.is-active]:fill-amber-500" />,
-    title: 'Posts',
+    icon: (
+      <Notebook className="group-[.is-active]:text-black group-[.is-active]:fill-amber-500 dark:group-[.is-active]:text-white dark:group-[.is-active]:fill-purple-500" />
+    ),
+    title: 'Blogs',
   },
-  { to: '/profile/bookmarks', icon: <Bookmark />, title: 'Bookmarks' },
+  {
+    to: '/profile/write',
+    icon: (
+      <NotebookPen className="group-[.is-active]:text-black group-[.is-active]:fill-amber-500 dark:group-[.is-active]:text-white dark:group-[.is-active]:fill-purple-500" />
+    ),
+    title: 'Write',
+  },
 ];
 export const ProfileSidebar = () => {
   return (
     <div className="bg-sidebar">
-      <ul className=" sticky top-0 h-fit flex flex-col p-2 gap-4 ">
+      <ul className="sticky top-0 h-fit flex flex-col p-2 gap-4 ">
         {sidebarLinks.map((link) => (
           <li key={link.to}>
             <NavLink
+              end
               to={link.to}
               className={(props) =>
                 clsx(

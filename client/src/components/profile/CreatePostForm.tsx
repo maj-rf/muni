@@ -13,8 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Editor } from './Editor';
-import { useRef } from 'react';
-import { MDXEditorMethods } from '@mdxeditor/editor';
 import { useCreatePostMutation } from '@/hooks/usePost';
 import { authClient } from '@/lib/auth-client';
 import { Loading } from '../common/Loading';
@@ -70,7 +68,6 @@ export const CreatePostForm = () => {
     },
   });
 
-  const ref = useRef<MDXEditorMethods>(null);
   const mutation = useCreatePostMutation();
   const { data: session } = authClient.useSession();
 
@@ -83,16 +80,9 @@ export const CreatePostForm = () => {
     });
   };
 
-  const handleBlur = () => {
-    if (ref.current) form.setValue('content', ref.current.getMarkdown());
-  };
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="p-4 space-y-5 border rounded-md max-w-[768px] mx-auto"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 space-y-5 border rounded-md">
         <div className="flex flex-col md:flex gap-2">
           <FormField
             control={form.control}
@@ -129,7 +119,7 @@ export const CreatePostForm = () => {
               <FormItem className="flex-1">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <Editor ref={ref} onBlur={handleBlur} value={field.value} initialMD={markdown} />
+                  <Editor field={{ ...field }} />
                 </FormControl>
                 <FormDescription></FormDescription>
                 <FormMessage />

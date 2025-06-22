@@ -1,10 +1,25 @@
-import { eq, and, asc, sql } from 'drizzle-orm';
+import { eq, and, asc, desc, sql, getTableColumns } from 'drizzle-orm';
 import { db } from './index.js';
-import { post } from './schema.js';
+import { post, user } from './schema.js';
 import type { TNewPost, TUpdatePost } from '../types/types.js';
 
 export async function findAuthorPosts(userId: string) {
-  return await db.select().from(post).where(eq(post.userId, userId));
+  return await db.select().from(post).where(eq(post.userId, userId)).orderBy(asc(post.createdAt));
+}
+
+export async function findAuthorPostById(userId: string, id: string) {
+  const result = await db
+    .select({
+      ...getTableColumns(post),
+      author: {
+        name: user.name,
+      },
+    })
+    .from(post)
+    .leftJoin(user, eq(post.userId, user.id))
+    .where(and(eq(post.id, id), eq(post.userId, userId)))
+    .limit(1);
+  return result[0];
 }
 
 export async function insertNewPost(userId: string, obj: TNewPost) {
@@ -25,17 +40,19 @@ export async function insertNewPost(userId: string, obj: TNewPost) {
 
 export async function findPostBySlug(slug: string) {
   // const result = await db.select().from(post).where(eq(post.slug, slug));
-  const result = await db.query.post.findFirst({
-    where: eq(post.slug, slug),
-    with: {
+
+  const result = await db
+    .select({
+      ...getTableColumns(post),
       author: {
-        columns: {
-          name: true,
-        },
+        name: user.name,
       },
-    },
-  });
-  return result;
+    })
+    .from(post)
+    .leftJoin(user, eq(post.userId, user.id))
+    .where(and(eq(post.slug, slug), eq(post.published, true)))
+    .limit(1);
+  return result[0];
 }
 
 export async function updatePost(update: TUpdatePost) {
@@ -55,7 +72,7 @@ export async function deletePost(postId: string, userId: string) {
 export async function findRecentPosts() {
   return await db.query.post.findMany({
     where: eq(post.published, true),
-    orderBy: [asc(post.createdAt)],
+    orderBy: [desc(post.createdAt)],
     limit: 5,
     with: {
       author: {

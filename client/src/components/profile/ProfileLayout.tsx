@@ -1,6 +1,7 @@
 import { authClient } from '@/lib/auth-client';
 import { Loading } from '../common/Loading';
 import { Navigate, Outlet } from 'react-router';
+import { ProfileSidebar } from './ProfileSidebar';
 
 export const ProfileLayout = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -10,10 +11,15 @@ export const ProfileLayout = () => {
         <Loading />
       </div>
     );
-  if (!session) return <Navigate to="/" />;
+  if (!session) return <Navigate to="/auth" />;
   return (
     <div className="h-[calc(100dvh-60px)]">
-      <Outlet />
+      <div className="grid grid-cols-[auto_minmax(0,_1fr)] h-full">
+        <ProfileSidebar />
+        <div className="px-4 py-2 w-full">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 };

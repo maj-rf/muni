@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet, ScrollRestoration } from 'react-router';
 import { Navbar } from './common/navbar/Navbar';
 export const RootLayout = () => {
   return (
@@ -7,6 +7,7 @@ export const RootLayout = () => {
       <main>
         <Outlet />
       </main>
+      <ScrollRestoration />
     </>
   );
 };
